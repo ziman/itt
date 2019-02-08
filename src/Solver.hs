@@ -1,6 +1,12 @@
 module Solver where
 
+import Data.Foldable
+import qualified Data.Set as S
+import qualified Data.Map as M
+import Control.Monad.Trans.Except
+
 import TT
+import Inference
 
 fillR :: M.Map Int Q -> Evar -> Q
 fillR evars (EV i) = M.findWithDefault I i evars

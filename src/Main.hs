@@ -1,5 +1,9 @@
 module Main where
 
+import qualified Data.Set as S
+import qualified Data.Map as M
+import Control.Monad.Trans.Except
+
 import TT
 --import Parser
 import Inference

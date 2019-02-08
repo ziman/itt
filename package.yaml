@@ -29,5 +29,8 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    default-extensions:
+    - OverloadedLists
     dependencies:
-    - itt
+    - containers
+    - transformers

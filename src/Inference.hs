@@ -5,6 +5,8 @@ import Prelude hiding (lookup, foldr)
 import Control.Monad.Trans.Class
 import Control.Monad.Trans.Except
 import Control.Monad.Trans.RWS.Strict
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 data Evar = EV Int | Q Q deriving (Eq, Ord)
 

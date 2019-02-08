@@ -1,9 +1,4 @@
-{-# LANGUAGE OverloadedLists #-}
 module TT where
-
-import Data.Foldable
-import qualified Data.Set as S
-import qualified Data.Map as M
 
 data Name = N String Int deriving (Eq, Ord)
 
