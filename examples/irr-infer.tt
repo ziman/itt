@@ -37,6 +37,6 @@ g d
 -- that choose the *meaning* of our program, and are therefore necessary.
 --
 -- In other words, by these three annotations,
--- we express that we want to erase less than we could.
+-- we express that we choose to erase less than we could.
 -- 
 -- All other annotations were inferred automatically.
