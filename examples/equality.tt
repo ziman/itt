@@ -1,0 +1,15 @@
+\Bool : Type.
+\True : Bool.
+\False : Bool.
+
+\Eq : (a :E Type) -> (x :E a) -> (y :E a) -> Type.
+\Refl : (a :E Type) -> (x :E a) -> Eq a x x.
+
+\the : (a : Type) -> (x :R a) -> a.
+
+\T : Type.
+\C : (x :I Bool) -> T.
+
+the
+  (Eq T (C True) (C False))  -- (C True) = (C False)
+  (Refl T (C True))          -- as witnessed by Refl
