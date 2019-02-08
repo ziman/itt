@@ -117,4 +117,4 @@ main = getArgs >>= \case
         Left err -> error $ show err
         Right tm -> check tm
 
-    _ -> error "usage: itt input.itt"
+    _ -> error "usage: itt input.tt"

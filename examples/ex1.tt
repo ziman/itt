@@ -1,0 +1,5 @@
+\Nat : Type.
+\Z   : Nat.
+\S   : (n :R: Nat) -> Nat.
+
+S Z
