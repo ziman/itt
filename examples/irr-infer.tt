@@ -7,12 +7,15 @@
 \T : Type.
 \C : (pf :I Bool) -> T.  -- change to (pf :E Bool) to cause type error
 
--- U is indexed with T, which contains an irrelevant field,
+-- U is indexed with T, which has an irrelevant constructor field,
 -- but we want the index of U itself to be relevant.
 \U : (t :E T) -> Type.
 
 -- Function `g` takes an element of `U (C True)`,
 -- (and needs it at runtime so it can't be erased).
+--
+-- Since `g` does not have a body, from which ITT could infer
+-- that its argument should be retained, we need to assert it.
 \g : (x :R U (C True)) -> Bool.
 
 -- But we have only `d : U (C b)` for some unknown Boolean `b`.
