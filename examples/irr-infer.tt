@@ -1,14 +1,29 @@
+-- Let's assume we have Booleans.
 \Bool : Type.
 \True : Bool.
 \False : Bool.
 
+-- T is a type that contains an irrelevant Boolean.
 \T : Type.
 \C : (pf :I Bool) -> T.  -- change to (pf :E Bool) to cause type error
 
+-- U is indexed with T, which contains an irrelevant field.
 \U : (t : T) -> Type.
-\D : (t :R T) -> U t.
 
+-- Function `g` takes an element of `U (C True)`.
 \g : (x :R U (C True)) -> Bool.
-\b : Bool.
 
-g (D (C b))
+-- But we have only `d : U (C b)` for some unknown Boolean `b`.
+\b : Bool.
+\d : U (C b).
+
+-- But we *can* apply `g` to `d` because `C` takes an irrelevant argument
+-- and therefore it does not matter that `b` may not be equal to `True`.
+g d
+
+-- Also notice that we didn't use any unnecessary annotations above,
+-- neither on binders, nor in applications.
+-- All of them were inferred automatically.
+--
+-- The only two places with an annotation are exactly those
+-- that choose the *meaning* of our program, and are therefore necessary.

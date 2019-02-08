@@ -15,7 +15,7 @@ type Parser a = Parsec String ParserState a
 readProgram :: String -> IO (Either ParseError Term)
 readProgram fname = do
     code <- readFile fname
-    return $ runParser term 1 fname code
+    return $ runParser (sp *> term) 1 fname code
 
 comment :: Parser ()
 comment = do
@@ -23,8 +23,11 @@ comment = do
     many $ satisfy (/= '\n')
     sp
 
+spaces1 :: Parser ()
+spaces1 = many1 (satisfy isSpace) *> pure ()
+
 sp :: Parser ()
-sp = many ((satisfy isSpace *> pure ()) <|> comment) *> pure ()
+sp = many (spaces1 <|> comment) *> pure ()
 
 kwd :: String -> Parser ()
 kwd s = try (string s) >> sp
