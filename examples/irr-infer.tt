@@ -7,10 +7,12 @@
 \T : Type.
 \C : (pf :I Bool) -> T.  -- change to (pf :E Bool) to cause type error
 
--- U is indexed with T, which contains an irrelevant field.
+-- U is indexed with T, which contains an irrelevant field,
+-- but we want the index of U itself to be relevant.
 \U : (t :E T) -> Type.
 
--- Function `g` takes an element of `U (C True)`.
+-- Function `g` takes an element of `U (C True)`,
+-- (and needs it at runtime so it can't be erased).
 \g : (x :R U (C True)) -> Bool.
 
 -- But we have only `d : U (C b)` for some unknown Boolean `b`.
@@ -18,12 +20,13 @@
 \d : U (C b).
 
 -- Thanks to the irrelevance of C's argument, we *can* apply `g` to `d`
--- and it does not matter that `b` may not be equal to `True`.
+-- and it does not matter that `b` may or may not be equal to `True`.
 g d
 
 -- Also notice that we didn't use any unnecessary annotations above,
 -- neither on binders, nor in applications.
--- All of them were inferred automatically.
 --
 -- The only three places with an annotation are exactly those
 -- that choose the *meaning* of our program, and are therefore necessary.
+-- 
+-- All other annotations were inferred automatically.
