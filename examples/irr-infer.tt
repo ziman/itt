@@ -17,8 +17,8 @@
 \b : Bool.
 \d : U (C b).
 
--- But we *can* apply `g` to `d` because `C` takes an irrelevant argument
--- and therefore it does not matter that `b` may not be equal to `True`.
+-- Thanks to the irrelevance of C's argument, we *can* apply `g` to `d`
+-- and it does not matter that `b` may not be equal to `True`.
 g d
 
 -- Also notice that we didn't use any unnecessary annotations above,
