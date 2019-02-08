@@ -31,6 +31,8 @@ executables:
     - -with-rtsopts=-N
     default-extensions:
     - OverloadedLists
+    - LambdaCase
     dependencies:
     - containers
     - transformers
+    - parsec

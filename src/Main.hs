@@ -1,11 +1,12 @@
 module Main where
 
+import System.Environment
+import Control.Monad.Trans.Except
 import qualified Data.Set as S
 import qualified Data.Map as M
-import Control.Monad.Trans.Except
 
 import TT
---import Parser
+import Parser
 import Inference
 import Solver
 
@@ -111,4 +112,9 @@ ex3 =
     app = foldl (\ap (ev, x) -> App (EV ev) ap x)
 
 main :: IO ()
-main = putStrLn "Hello World!"
+main = getArgs >>= \case
+    [fname] -> Parser.readProgram fname >>= \case
+        Left err -> error $ show err
+        Right tm -> check tm
+
+    _ -> error "usage: itt input.itt"
