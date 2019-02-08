@@ -1,0 +1,14 @@
+\Bool : Type.
+\True : Bool.
+\False : Bool.
+
+\T : Type.
+\C : (pf :I Bool) -> T.  -- change to (pf :E Bool) to cause type error
+
+\U : (t : T) -> Type.
+\D : (t :R T) -> U t.
+
+\g : (x :R U (C True)) -> Bool.
+\b : Bool.
+
+g (D (C b))

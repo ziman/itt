@@ -17,8 +17,14 @@ readProgram fname = do
     code <- readFile fname
     return $ runParser term 1 fname code
 
+comment :: Parser ()
+comment = do
+    kwd "--"
+    many $ satisfy (/= '\n')
+    sp
+
 sp :: Parser ()
-sp = many (satisfy isSpace) *> pure ()
+sp = many ((satisfy isSpace *> pure ()) <|> comment) *> pure ()
 
 kwd :: String -> Parser ()
 kwd s = try (string s) >> sp

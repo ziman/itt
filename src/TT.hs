@@ -49,11 +49,20 @@ instance PrettyR r => Pretty (Name, r, TT r) where
 
 instance PrettyR r => Pretty (TT r) where
     pretty (V n) = pretty n
+    pretty tm@(Lam _ _ (V Erased) _)
+        | (ns, rest) <- unLam tm
+        = text "\\" <> hsep (map pretty ns) <> dot $$ nest 2 (pretty rest)
     pretty (Lam n r ty rhs) = text "\\" <> pretty (n, r, ty) <> dot $$ nest 2 (pretty rhs)
     pretty (Pi n r ty rhs)  = parens (pretty (n, r, ty)) <+> text "->" <+> pretty rhs
-    pretty tm@(App _ _ _) | (f, xs) <- unApp [] tm
+    pretty tm@(App _ _ _)
+        | (f, xs) <- unApp [] tm
         = wrap f <+> hsep [prettyApp r <+> wrap x | (r, x) <- xs]
     pretty Type = text "Type"
+
+unLam :: TT r -> ([Name], TT r)
+unLam (Lam n r (V Erased) rhs) = case unLam rhs of
+    (ns, rest) -> (n:ns, rest)
+unLam tm = ([], tm)
 
 unApp :: [(r, TT r)] -> TT r -> (TT r, [(r, TT r)])
 unApp acc (App r f x) = unApp ((r,x):acc) f
