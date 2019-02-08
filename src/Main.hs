@@ -58,7 +58,11 @@ check tm = case infer tm of
         let solution = fill evars tm
         printP solution
 
+        putStrLn "\n### Erase: irrelevant data ###\n"
+        printP (erase E I solution)
 
+        putStrLn "\n### Erase: non-runtime data ###\n"
+        printP (erase E E solution)
 
 ex1 :: Term
 ex1 =

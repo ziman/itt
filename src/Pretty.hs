@@ -70,6 +70,10 @@ rbrace   = text "}"
 instance Semigroup Doc where
     Doc xs <> Doc ys = Doc $ meld "" xs ys
 
+instance Monoid Doc where
+    mempty = empty
+    mappend = (<>)
+
 (<+>) :: Doc -> Doc -> Doc
 Doc xs <+> Doc ys = Doc $ meld " " xs ys
 

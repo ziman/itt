@@ -2,16 +2,29 @@ module TT where
 
 import Pretty
 
-data Name = N String Int deriving (Eq, Ord, Show)
+data Name = N String Int | Erased deriving (Eq, Ord, Show)
 
 instance Pretty Name where
     pretty (N s 0) = text s
     pretty (N s i) = text s <> int i
+    pretty Erased = text "_"
 
 data Q = I | E | R deriving (Eq, Ord, Show)
 
 instance Pretty Q where
     pretty = text . show
+
+class PrettyR r where
+    prettyApp :: r -> Doc
+    prettyCol :: r -> Doc
+
+instance PrettyR Q where
+    prettyApp q = text "-" <> pretty q <> text "-"
+    prettyCol q = text ":" <> pretty q
+
+instance PrettyR () where
+    prettyApp () = empty
+    prettyCol () = text ":"
 
 instance Semigroup Q where
     (<>) = min
@@ -28,22 +41,25 @@ data TT r
     | Type
     deriving (Eq, Ord, Show)
 
-instance Pretty r => Pretty (Name, r, TT r) where
-    pretty (n, r, ty) = pretty n <+> colon <> pretty r <+> pretty ty
+instance Pretty () where
+    pretty () = mempty
 
-instance Pretty r => Pretty (TT r) where
+instance PrettyR r => Pretty (Name, r, TT r) where
+    pretty (n, r, ty) = pretty n <+> prettyCol r <+> pretty ty
+
+instance PrettyR r => Pretty (TT r) where
     pretty (V n) = pretty n
     pretty (Lam n r ty rhs) = text "\\" <> pretty (n, r, ty) <> dot $$ nest 2 (pretty rhs)
     pretty (Pi n r ty rhs)  = parens (pretty (n, r, ty)) <+> text "->" <+> pretty rhs
     pretty tm@(App _ _ _) | (f, xs) <- unApp [] tm
-        = wrap f <+> hsep [text "-" <> pretty r <> text "-" <+> wrap x | (r, x) <- xs]
+        = wrap f <+> hsep [prettyApp r <+> wrap x | (r, x) <- xs]
     pretty Type = text "Type"
 
 unApp :: [(r, TT r)] -> TT r -> (TT r, [(r, TT r)])
 unApp acc (App r f x) = unApp ((r,x):acc) f
 unApp acc tm = (tm, acc)
 
-wrap :: Pretty r => TT r -> Doc
+wrap :: PrettyR r => TT r -> Doc
 wrap tm@Type = pretty tm
 wrap tm@(V n) = pretty tm
 wrap tm = parens $ pretty tm
@@ -89,3 +105,18 @@ rnf (App r f x)
     | otherwise
     = App r (rnf f) (rnf x)
 rnf tm@Type = tm
+
+erase :: Ord r => r -> r -> TT r -> TT ()
+erase tyR eR (V n) = V n
+erase tyR eR (Lam n r ty rhs)
+    | r <= eR = erase tyR eR rhs
+    | tyR <= eR = Lam n () (V Erased) $ erase tyR eR rhs
+    | tyR >  eR = Lam n () (erase tyR eR ty) $ erase tyR eR rhs
+erase tyR eR (Pi n r ty rhs)
+    | r <= eR = erase tyR eR rhs
+    | tyR <= eR = Pi n () (V Erased) $ erase tyR eR rhs
+    | tyR >  eR = Pi n () (erase tyR eR ty) $ erase tyR eR rhs
+erase tyR eR (App r f x)
+    | r <= eR   = erase tyR eR f
+    | otherwise = App () (erase tyR eR f) (erase tyR eR x)
+erase tyR eR Type = Type

@@ -12,9 +12,12 @@ import Pretty
 
 data Evar = EV Int | Q Q deriving (Eq, Ord)
 
-instance Pretty Evar where
-    pretty (EV i) = int i
-    pretty (Q q)  = pretty q
+instance PrettyR Evar where
+    prettyApp (EV i) = text "-" <> int i <> text "-"
+    prettyApp (Q q)  = text "-" <> pretty q <> text "-"
+
+    prettyCol (EV i) = text ":" <> int i
+    prettyCol (Q q)  = text ":" <> pretty q
 
 instance Show Evar where
     show (EV i) = show i
