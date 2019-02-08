@@ -25,11 +25,11 @@ instance Show Evar where
 
 type Env r = M.Map Name (r, TT r)
 
-data ConstrRHS = CEV Evar | (:~) (TT Evar) (TT Evar) deriving (Eq, Ord)
+data ConstrRHS = CEV Evar | CEq [String] (TT Evar) (TT Evar) deriving (Eq, Ord)
 
 instance Show ConstrRHS where
     show (CEV v) = show v
-    show (p :~ q) = show p ++ " ~ " ++ show q
+    show (CEq _bt p q) = show p ++ " ~ " ++ show q
 
 data Constr = (:->) (S.Set Evar) ConstrRHS deriving (Eq, Ord)
 
@@ -96,7 +96,9 @@ assert cr = do
     tell [gs :-> cr]
 
 (~=) :: Term -> Term -> TC ()
-l ~= r = assert (rnf l :~ rnf r)
+l ~= r = do
+    bt <- tcBacktrace <$> ask
+    assert $ CEq bt (rnf l) (rnf r)
 
 (<->) :: Evar -> Evar -> TC ()
 p <-> q = tell [[p] :-> CEV q, [q] :-> CEV p]
@@ -107,18 +109,18 @@ with (n, r, ty) = local $
         -> TCEnv (M.insert n (r, ty) env) gs bt
 
 inferTm :: Term -> TC Type
-inferTm (V n) = do
+inferTm (V n) = bt ("VAR", n) $ do
     (r, ty) <- lookup n
     assert (CEV r)
     return ty    
 
-inferTm (Lam n r ty rhs) = do
+inferTm (Lam n r ty rhs) = bt ("LAM", n) $ do
     tyty <- given (Q E) $ inferTm ty
     tyty ~= Type
     rty <- with (n, r, ty) $ inferTm rhs
     return $ Pi n r ty rty
 
-inferTm (Pi n r ty rhs) = do
+inferTm (Pi n r ty rhs) = bt ("PI", n) $ do
     tyty <- given (Q E) $ inferTm ty
     tyty ~= Type
 
@@ -127,9 +129,9 @@ inferTm (Pi n r ty rhs) = do
 
     return Type
 
-inferTm (App r f x) = do
-    fty <- inferTm f
-    xty <- given r $ inferTm x
+inferTm (App r f x) = bt ("APP", f) $ do
+    fty <- bt "LHS" $ inferTm f
+    xty <- bt ("RHS", fty) $ given r $ inferTm x
 
     case rnf fty of
         Pi n' r' ty' rhs' -> do

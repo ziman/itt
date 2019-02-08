@@ -20,28 +20,32 @@ fill evars (App r f x) = App (fillR evars r) (fill evars f) (fill evars x)
 fill evars Type = Type
 
 data ConvErr
-    = CantConvert Term Term
-    deriving (Eq, Ord, Show)
+    = CantConvert [String] Term Term
+    deriving (Eq, Ord)
 
-conv :: Term -> Term -> Except ConvErr Constrs
-conv (V n) (V n') | n == n' = return S.empty
-conv (Lam n r ty rhs) (Lam n' r' ty' rhs') = do
-    tycs  <- conv ty ty'
-    rhscs <- conv rhs $ subst n' (V n) rhs'
+instance Show ConvErr where
+    show (CantConvert bt p q) = "In environment:\n" ++ unlines (map ("  "++) $ reverse bt)
+        ++ "!! can't convert " ++ show p ++ " ~ " ++ show q
+
+conv :: [String] -> Term -> Term -> Except ConvErr Constrs
+conv bt (V n) (V n') | n == n' = return S.empty
+conv bt (Lam n r ty rhs) (Lam n' r' ty' rhs') = do
+    tycs  <- conv bt ty ty'
+    rhscs <- conv bt rhs $ subst n' (V n) rhs'
     return $ tycs `S.union` rhscs `S.union` [[r] :-> CEV r', [r'] :-> CEV r]
 
-conv (Pi n r ty rhs) (Pi n' r' ty' rhs') = do
-    tycs  <- conv ty ty'
-    rhscs <- conv rhs $ subst n' (V n) rhs'
+conv bt (Pi n r ty rhs) (Pi n' r' ty' rhs') = do
+    tycs  <- conv bt ty ty'
+    rhscs <- conv bt rhs $ subst n' (V n) rhs'
     return $ tycs `S.union` rhscs `S.union` [[r] :-> CEV r', [r'] :-> CEV r]
 
-conv (App r f x) (App r' f' x') = do
-    fcs <- conv f f'
-    return $ fcs `S.union` [[r] :-> CEV r', [r'] :-> CEV r, [r] :-> (x :~ x')]
+conv bt (App r f x) (App r' f' x') = do
+    fcs <- conv bt f f'
+    return $ fcs `S.union` [[r] :-> CEV r', [r'] :-> CEV r, [r] :-> (CEq bt x x')]
 
-conv Type Type = return S.empty
+conv _bt Type Type = return S.empty
 
-conv p q = throwE $ CantConvert p q
+conv bt p q = throwE $ CantConvert bt p q
 
 solve :: Constrs -> M.Map Int Q -> M.Map Int Q
 solve cs evars
@@ -54,7 +58,7 @@ solve cs evars
         | vals evars gs <= q = id
         | otherwise    = error $ "inconsistent constraint: " ++ show c
     addConstr (gs :-> CEV (EV i)) = M.insert i (vals evars gs)
-    addConstr (gs :-> (_ :~ _)) = id
+    addConstr (gs :-> (CEq _ _ _)) = id
 
 val :: M.Map Int Q -> Evar -> Q
 val evars (EV i) = M.findWithDefault I i evars

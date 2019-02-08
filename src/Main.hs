@@ -26,7 +26,7 @@ check tm = case infer tm of
         let iter i cs ee@(evars, eqs) = do
                 putStrLn $ "-> iteration " ++ show i
                 let evars' = solve cs evars
-                    eqs' = S.fromList [(p, q) | (gs :-> (p :~ q)) <- S.toList cs, vals evars' gs > I]
+                    eqs' = S.fromList [(bt, p, q) | (gs :-> CEq bt p q) <- S.toList cs, vals evars' gs > I]
                     ee' = (evars', eqs')
                 if ee == ee'
                     then return evars
@@ -41,10 +41,10 @@ check tm = case infer tm of
                         putStrLn "  rechecking eqs:"
                         putStrLn $ unlines
                             [ "    " ++ show p ++ " ~ " ++ show q
-                            | (p, q) <- S.toList eqs'
+                            | (_bt, p, q) <- S.toList eqs'
                             ]
 
-                        case runExcept (S.unions <$> traverse (uncurry conv) (S.toList eqs')) of
+                        case runExcept (S.unions <$> traverse (\(bt,p,q) -> conv bt p q) (S.toList eqs')) of
                             Left err -> error $ "could not convert: " ++ show err
                             Right cs' -> do
                                 putStrLn "  new constraints from conversion:"

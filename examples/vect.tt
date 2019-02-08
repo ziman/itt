@@ -1,0 +1,15 @@
+\Bool : Type.
+\T : Bool.
+\F : Bool.
+
+\Nat : Type.
+\Z : Nat.
+\S : (n :R Nat) -> Nat.
+
+\Vect : (n : Nat) -> (a : Type) -> Type.
+\Nil : (a : Type) -> Vect Z a.
+\Cons : (a : Type) -> (n : Nat) -> (x :R a) -> (xs :R Vect n a) -> Vect (S n) a.
+
+Cons Bool (S Z) T
+  (Cons Bool Z F
+    (Nil Bool))
