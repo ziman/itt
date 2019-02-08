@@ -8,7 +8,7 @@
 \C : (pf :I Bool) -> T.  -- change to (pf :E Bool) to cause type error
 
 -- U is indexed with T, which contains an irrelevant field.
-\U : (t : T) -> Type.
+\U : (t :E T) -> Type.
 
 -- Function `g` takes an element of `U (C True)`.
 \g : (x :R U (C True)) -> Bool.
@@ -25,5 +25,5 @@ g d
 -- neither on binders, nor in applications.
 -- All of them were inferred automatically.
 --
--- The only two places with an annotation are exactly those
+-- The only three places with an annotation are exactly those
 -- that choose the *meaning* of our program, and are therefore necessary.
