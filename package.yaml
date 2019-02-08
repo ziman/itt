@@ -32,6 +32,7 @@ executables:
     default-extensions:
     - OverloadedLists
     - LambdaCase
+    - FlexibleInstances
     dependencies:
     - containers
     - transformers

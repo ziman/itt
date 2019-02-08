@@ -9,14 +9,15 @@ import TT
 import Parser
 import Inference
 import Solver
+import Pretty
 
 check :: Term -> IO ()
 check tm = case infer tm of
     Left err -> print err
     Right (ty, cs) -> do
         putStrLn "### Constraints ###\n"
-        print tm
-        putStrLn $ "  : " ++ show ty
+        printP tm
+        putStrLn $ "  : " ++ prettyShow ty
         putStrLn ""
         putStrLn $ unlines ["  " ++ show c | c <- S.toList cs]
 
@@ -53,7 +54,10 @@ check tm = case infer tm of
 
         putStrLn "\n### Final solution ###\n"
         putStrLn $ unlines ["  " ++ show i ++ " -> " ++ show q | (i, q) <- M.toList evars]
-        print $ fill evars tm
+        let solution = fill evars tm
+        printP solution
+
+
 
 ex1 :: Term
 ex1 =

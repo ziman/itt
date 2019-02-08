@@ -43,9 +43,9 @@ name = do
 
 evar :: Parser Evar
 evar =
-    (kwd ":I:" *> pure (Q I))
-    <|> (kwd ":E:" *> pure (Q E))
-    <|> (kwd ":R:" *> pure (Q R))
+    (kwd ":I" *> pure (Q I))
+    <|> (kwd ":E" *> pure (Q E))
+    <|> (kwd ":R" *> pure (Q R))
     <|> (kwd ":" *> freshEvar)
 
 lam :: Parser Term

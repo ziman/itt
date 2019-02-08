@@ -1,12 +1,17 @@
 module TT where
 
-data Name = N String Int deriving (Eq, Ord)
+import Pretty
 
-instance Show Name where
-    show (N s 0) = s
-    show (N s i) = s ++ show i
+data Name = N String Int deriving (Eq, Ord, Show)
+
+instance Pretty Name where
+    pretty (N s 0) = text s
+    pretty (N s i) = text s <> int i
 
 data Q = I | E | R deriving (Eq, Ord, Show)
+
+instance Pretty Q where
+    pretty = text . show
 
 instance Semigroup Q where
     (<>) = min
@@ -21,14 +26,27 @@ data TT r
     | Pi  Name r (TT r) (TT r)
     | App r (TT r) (TT r)
     | Type
-    deriving (Eq, Ord)
+    deriving (Eq, Ord, Show)
 
-instance Show r => Show (TT r) where
-    show (V n) = show n
-    show (Lam n r ty rhs) = "(\\" ++ show n ++ " :" ++ show r ++ ": " ++ show ty ++ ". " ++ show rhs ++ ")"
-    show (Pi n r ty rhs)  = "(" ++ show n ++ " :" ++ show r ++ ": " ++ show ty ++ ") -> " ++ show rhs
-    show (App r f x) = show f ++ " @" ++ show r ++ " " ++ show x
-    show Type = "Type"
+instance Pretty r => Pretty (Name, r, TT r) where
+    pretty (n, r, ty) = pretty n <+> colon <> pretty r <+> pretty ty
+
+instance Pretty r => Pretty (TT r) where
+    pretty (V n) = pretty n
+    pretty (Lam n r ty rhs) = text "\\" <> pretty (n, r, ty) <> dot $$ nest 2 (pretty rhs)
+    pretty (Pi n r ty rhs)  = parens (pretty (n, r, ty)) <+> text "->" <+> pretty rhs
+    pretty tm@(App _ _ _) | (f, xs) <- unApp [] tm
+        = wrap f <+> hsep [text "-" <> pretty r <> text "-" <+> wrap x | (r, x) <- xs]
+    pretty Type = text "Type"
+
+unApp :: [(r, TT r)] -> TT r -> (TT r, [(r, TT r)])
+unApp acc (App r f x) = unApp ((r,x):acc) f
+unApp acc tm = (tm, acc)
+
+wrap :: Pretty r => TT r -> Doc
+wrap tm@Type = pretty tm
+wrap tm@(V n) = pretty tm
+wrap tm = parens $ pretty tm
 
 infix 6 `freeIn`
 freeIn :: Name -> TT r -> Bool

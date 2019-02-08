@@ -1,6 +1,5 @@
 module Inference where
 
-import TT
 import Prelude hiding (lookup, foldr)
 import Control.Monad.Trans.Class
 import Control.Monad.Trans.Except
@@ -8,7 +7,14 @@ import Control.Monad.Trans.RWS.Strict
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+import TT
+import Pretty
+
 data Evar = EV Int | Q Q deriving (Eq, Ord)
+
+instance Pretty Evar where
+    pretty (EV i) = int i
+    pretty (Q q)  = pretty q
 
 instance Show Evar where
     show (EV i) = show i
