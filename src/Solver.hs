@@ -24,7 +24,7 @@ data ConvErr
     deriving (Eq, Ord)
 
 instance Show ConvErr where
-    show (CantConvert bt p q) = "In environment:\n" ++ unlines (map ("  "++) $ reverse bt)
+    show (CantConvert bt p q) = "With backtrace:\n" ++ unlines (map ("  "++) $ reverse bt)
         ++ "!! can't convert " ++ show p ++ " ~ " ++ show q
 
 conv :: [String] -> Term -> Term -> Except ConvErr Constrs

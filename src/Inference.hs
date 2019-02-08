@@ -57,7 +57,12 @@ data TCFailure = TCFailure
     { tcfMessage :: TCErrMsg
     , tcfBacktrace :: [String]
     }
-    deriving (Eq, Ord, Show)
+    deriving (Eq, Ord)
+
+instance Show TCFailure where
+    show TCFailure{tcfMessage, tcfBacktrace} =
+        "With backtrace:\n" ++ unlines (map ("  "++) $ reverse tcfBacktrace)
+        ++ "!! " ++ show tcfMessage
 
 newtype TCState = TCState { freshI :: Int }
 

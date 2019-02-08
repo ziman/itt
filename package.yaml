@@ -33,6 +33,7 @@ executables:
     - OverloadedLists
     - LambdaCase
     - FlexibleInstances
+    - NamedFieldPuns
     dependencies:
     - containers
     - transformers

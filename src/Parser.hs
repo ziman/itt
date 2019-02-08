@@ -19,7 +19,7 @@ readProgram fname = do
 
 comment :: Parser ()
 comment = do
-    kwd "--"
+    try (string "--")  -- must not be "kwd" because in "--\n", it'd eat the newline
     many $ satisfy (/= '\n')
     sp
 

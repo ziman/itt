@@ -4,9 +4,9 @@
 \False : Bool.
 
 -- T is a type that contains an irrelevant Boolean.
---
 -- Change to (pf :E Bool) to cause type error.
--- If you change it to (pf : Bool), inference will make it irrelevant
+--
+-- If you change it to (pf : Bool), inference will still make it irrelevant
 -- since it is not necessary to make it relevant for the program to typecheck.
 \T : Type.
 \C : (pf :I Bool) -> T.
