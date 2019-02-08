@@ -15,13 +15,14 @@ check :: Term -> IO ()
 check tm = case infer tm of
     Left err -> print err
     Right (ty, cs) -> do
-        putStrLn "### Constraints ###\n"
+        putStrLn "### Inferred type ###\n"
         printP tm
-        putStrLn $ "  : " ++ prettyShow ty
+        putStrLn $ "\n  : " ++ prettyShow ty
         putStrLn ""
+        putStrLn "### Constraints ###\n"
         putStrLn $ unlines ["  " ++ show c | c <- S.toList cs]
 
-        putStrLn "### Solution ###\n"
+        putStrLn "### Solving ###\n"
         let iter i cs ee@(evars, eqs) = do
                 putStrLn $ "-> iteration " ++ show i
                 let evars' = solve cs evars
