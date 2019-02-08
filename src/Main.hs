@@ -61,10 +61,10 @@ check tm = case infer tm of
         printP solution
 
         putStrLn "\n### Erase: irrelevant data ###\n"
-        printP (erase E I solution)
+        printP (erase I solution)
 
         putStrLn "\n### Erase: non-runtime data ###\n"
-        printP (erase E E solution)
+        printP (erase E solution)
 
 main :: IO ()
 main = getArgs >>= \case

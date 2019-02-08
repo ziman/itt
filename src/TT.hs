@@ -115,17 +115,17 @@ rnf (App r f x)
     = App r (rnf f) (rnf x)
 rnf tm@Type = tm
 
-erase :: Ord r => r -> r -> TT r -> TT ()
-erase tyR eR (V n) = V n
-erase tyR eR (Lam n r ty rhs)
-    | r <= eR = erase tyR eR rhs
-    | tyR <= eR = Lam n () (V Erased) $ erase tyR eR rhs
-    | tyR >  eR = Lam n () (erase tyR eR ty) $ erase tyR eR rhs
-erase tyR eR (Pi n r ty rhs)
-    | r <= eR = erase tyR eR rhs
-    | tyR <= eR = Pi n () (V Erased) $ erase tyR eR rhs
-    | tyR >  eR = Pi n () (erase tyR eR ty) $ erase tyR eR rhs
-erase tyR eR (App r f x)
-    | r <= eR   = erase tyR eR f
-    | otherwise = App () (erase tyR eR f) (erase tyR eR x)
-erase tyR eR Type = Type
+erase :: Q -> TT Q -> TT ()
+erase eR (V n) = V n
+erase eR (Lam n r ty rhs)
+    | r <= eR = erase eR rhs
+    | E <= eR = Lam n () (V Erased) $ erase eR rhs
+    | E >  eR = Lam n () (erase eR ty) $ erase eR rhs
+erase eR (Pi n r ty rhs)
+    | r <= eR = erase eR rhs
+    | E <= eR = Pi n () (V Erased) $ erase eR rhs
+    | E >  eR = Pi n () (erase eR ty) $ erase eR rhs
+erase eR (App r f x)
+    | r <= eR   = erase eR f
+    | otherwise = App () (erase eR f) (erase eR x)
+erase eR Type = Type
