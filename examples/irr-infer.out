@@ -1,0 +1,168 @@
+### Inferred type ###
+
+\Bool :1 Type.
+  \True :2 Bool.
+    \False :3 Bool.
+      \T :4 Type.
+        \C :5 (pf :I Bool) -> T.
+          \U :6 (t :E T) -> Type.
+            \g :7 (x :R U -9- (C -8- True)) -> Bool.
+              \b :10 Bool.
+                \d :11 U -13- (C -12- b).
+                  g -14- d
+
+  : (Bool :1 Type) -> (True :2 Bool) -> (False :3 Bool) -> (T :4 Type) -> (C :5 (pf :I Bool) -> T) -> (U :6 (t :E T) -> Type) -> (g :7 (x :R U -9- (C -8- True)) -> Bool) -> (b :10 Bool) -> (d :11 U -13- (C -12- b)) -> Bool
+
+### Constraints ###
+
+  [] -> 7
+  [] -> U -13- (C -12- b) ~ U -9- (C -8- True)
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [8] -> I
+  [8,9,E] -> 2
+  [9] -> E
+  [9,E] -> 5
+  [9,E] -> Bool ~ Bool
+  [12] -> I
+  [12,13,E] -> 10
+  [13] -> E
+  [13,E] -> 5
+  [13,E] -> Bool ~ Bool
+  [14] -> 11
+  [14] -> R
+  [I] -> 8
+  [I] -> 12
+  [E] -> 1
+  [E] -> 4
+  [E] -> 6
+  [E] -> 9
+  [E] -> 13
+  [E] -> T ~ T
+  [E] -> T ~ T
+  [E] -> Type ~ Type
+  [E] -> Type ~ Type
+  [E] -> Type ~ Type
+  [R] -> 14
+
+### Solving ###
+
+-> iteration 1
+  evar updates:
+    1 -> E
+    4 -> E
+    5 -> E
+    6 -> E
+    7 -> R
+    9 -> E
+    11 -> R
+    13 -> E
+    14 -> R
+
+  rechecking eqs:
+    Bool ~ Bool
+    Bool ~ Bool
+    T ~ T
+    T ~ T
+    U -13- (C -12- b) ~ U -9- (C -8- True)
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+
+  new constraints from conversion:
+    [9] -> 13
+    [13] -> 9
+    [13] -> C -12- b ~ C -8- True
+
+-> iteration 2
+  evar updates:
+
+  rechecking eqs:
+    Bool ~ Bool
+    Bool ~ Bool
+    T ~ T
+    T ~ T
+    C -12- b ~ C -8- True
+    U -13- (C -12- b) ~ U -9- (C -8- True)
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+
+  new constraints from conversion:
+    [8] -> 12
+    [9] -> 13
+    [12] -> 8
+    [12] -> b ~ True
+    [13] -> 9
+    [13] -> C -12- b ~ C -8- True
+
+-> iteration 3
+
+### Final solution ###
+
+  1 -> E
+  2 -> I
+  4 -> E
+  5 -> E
+  6 -> E
+  7 -> R
+  8 -> I
+  9 -> E
+  10 -> I
+  11 -> R
+  12 -> I
+  13 -> E
+  14 -> R
+
+### Fully annotated program ###
+
+\Bool :E Type.
+  \True :I Bool.
+    \False :I Bool.
+      \T :E Type.
+        \C :E (pf :I Bool) -> T.
+          \U :E (t :E T) -> Type.
+            \g :R (x :R U -E- (C -I- True)) -> Bool.
+              \b :I Bool.
+                \d :R U -E- (C -I- b).
+                  g -R- d
+
+### Erase: irrelevant data ###
+
+\Bool : Type.
+  \T : Type.
+    \C : T.
+      \U : (t : T) -> Type.
+        \g : (x : U C) -> Bool.
+          \d : U C.
+            g d
+
+### Erase: non-runtime data ###
+
+\g d.
+  g d

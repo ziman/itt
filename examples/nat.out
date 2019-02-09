@@ -1,0 +1,67 @@
+### Inferred type ###
+
+\Nat :1 Type.
+  \Z :2 Nat.
+    \S :3 (n :R Nat) -> Nat.
+      S -4- Z
+
+  : (Nat :1 Type) -> (Z :2 Nat) -> (S :3 (n :R Nat) -> Nat) -> Nat
+
+### Constraints ###
+
+  [] -> 3
+  [] -> Nat ~ Nat
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [4] -> 2
+  [4] -> R
+  [E] -> 1
+  [E] -> Type ~ Type
+  [R] -> 4
+
+### Solving ###
+
+-> iteration 1
+  evar updates:
+    1 -> E
+    2 -> R
+    3 -> R
+    4 -> R
+
+  rechecking eqs:
+    Nat ~ Nat
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+
+  new constraints from conversion:
+
+-> iteration 2
+
+### Final solution ###
+
+  1 -> E
+  2 -> R
+  3 -> R
+  4 -> R
+
+### Fully annotated program ###
+
+\Nat :E Type.
+  \Z :R Nat.
+    \S :R (n :R Nat) -> Nat.
+      S -R- Z
+
+### Erase: irrelevant data ###
+
+\Nat : Type.
+  \Z : Nat.
+    \S : (n : Nat) -> Nat.
+      S Z
+
+### Erase: non-runtime data ###
+
+\Z S.
+  S Z

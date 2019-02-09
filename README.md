@@ -5,7 +5,8 @@ ITT infers irrelevance *and* erasure by interleaving constraint solving and type
 ITT supports only variables, lambdas and applications so if you need global definitions,
 you need to bring them into scope using lambdas. There's no pattern matching for now.
 
-You can look at [one of the example programs](https://github.com/ziman/itt/blob/master/examples/irr-infer.tt).
+You can look at [one of the example programs](https://github.com/ziman/itt/blob/master/examples/irr-infer.tt)
+and [the corresponding output](https://github.com/ziman/itt/blob/master/examples/irr-infer.out).
 
 ## Usage
 

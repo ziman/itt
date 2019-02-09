@@ -1,0 +1,244 @@
+### Inferred type ###
+
+\Bool :1 Type.
+  \True :2 Bool.
+    \False :3 Bool.
+      \Eq :4 (a :E Type) -> (x :E a) -> (y :E a) -> Type.
+        \Refl :5 (a :E Type) -> (x :E a) -> Eq -6- a -7- x -8- x.
+          \the :9 (a :10 Type) -> (x :R a) -> a.
+            \T :11 Type.
+              \C :12 (x :I Bool) -> T.
+                the -21- (Eq -15- T -16- (C -13- True) -17- (C -14- False)) -22- (Refl -19- T -20- (C -18- True))
+
+  : (Bool :1 Type) -> (True :2 Bool) -> (False :3 Bool) -> (Eq :4 (a :E Type) -> (x :E a) -> (y :E a) -> Type) -> (Refl :5 (a :E Type) -> (x :E a) -> Eq -6- a -7- x -8- x) -> (the :9 (a :10 Type) -> (x :R a) -> a) -> (T :11 Type) -> (C :12 (x :I Bool) -> T) -> Eq -15- T -16- (C -13- True) -17- (C -14- False)
+
+### Constraints ###
+
+  [] -> 9
+  [] -> Eq -6- T -7- (C -18- True) -8- (C -18- True) ~ Eq -15- T -16- (C -13- True) -17- (C -14- False)
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [] -> Type ~ Type
+  [6] -> E
+  [6,E] -> E
+  [7] -> E
+  [7,E] -> E
+  [8] -> E
+  [8,E] -> E
+  [10] -> 21
+  [13] -> I
+  [13,16,21] -> 2
+  [14] -> I
+  [14,17,21] -> 3
+  [15] -> E
+  [15,21] -> 11
+  [16] -> E
+  [16,21] -> 12
+  [16,21] -> Bool ~ Bool
+  [17] -> E
+  [17,21] -> 12
+  [17,21] -> Bool ~ Bool
+  [18] -> I
+  [18,20,22] -> 2
+  [19] -> E
+  [19,22] -> 11
+  [20] -> E
+  [20,22] -> 12
+  [20,22] -> Bool ~ Bool
+  [21] -> 4
+  [21] -> 10
+  [21] -> T ~ T
+  [21] -> T ~ T
+  [21] -> Type ~ Type
+  [22] -> 5
+  [22] -> R
+  [22] -> T ~ T
+  [22] -> Type ~ Type
+  [I] -> 13
+  [I] -> 14
+  [I] -> 18
+  [E] -> 1
+  [E] -> 4
+  [E] -> 6
+  [E] -> 7
+  [E] -> 8
+  [E] -> 10
+  [E] -> 11
+  [E] -> 15
+  [E] -> 16
+  [E] -> 17
+  [E] -> 19
+  [E] -> 20
+  [E] -> E
+  [E] -> a ~ a
+  [E] -> a ~ a
+  [E] -> Type ~ Type
+  [E] -> Type ~ Type
+  [E] -> Type ~ Type
+  [E] -> Type ~ Type
+  [E] -> Type ~ Type
+  [E] -> Type ~ Type
+  [E] -> Type ~ Type
+  [E] -> Type ~ Type
+  [E] -> Type ~ Type
+  [R] -> 22
+
+### Solving ###
+
+-> iteration 1
+  evar updates:
+    1 -> E
+    5 -> R
+    6 -> E
+    7 -> E
+    8 -> E
+    9 -> R
+    15 -> E
+    16 -> E
+    17 -> E
+    19 -> E
+    20 -> E
+    22 -> R
+
+  rechecking eqs:
+    Bool ~ Bool
+    a ~ a
+    a ~ a
+    Type ~ Type
+    T ~ T
+    Type ~ Type
+    Eq -6- T -7- (C -18- True) -8- (C -18- True) ~ Eq -15- T -16- (C -13- True) -17- (C -14- False)
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+
+  new constraints from conversion:
+    [6] -> 15
+    [6] -> T ~ T
+    [7] -> 16
+    [7] -> C -18- True ~ C -13- True
+    [8] -> 17
+    [8] -> C -18- True ~ C -14- False
+    [15] -> 6
+    [16] -> 7
+    [17] -> 8
+
+-> iteration 2
+  evar updates:
+
+  rechecking eqs:
+    Bool ~ Bool
+    a ~ a
+    a ~ a
+    Type ~ Type
+    T ~ T
+    Type ~ Type
+    T ~ T
+    Eq -6- T -7- (C -18- True) -8- (C -18- True) ~ Eq -15- T -16- (C -13- True) -17- (C -14- False)
+    C -18- True ~ C -13- True
+    C -18- True ~ C -14- False
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+    Type ~ Type
+
+  new constraints from conversion:
+    [6] -> 15
+    [6] -> T ~ T
+    [7] -> 16
+    [7] -> C -18- True ~ C -13- True
+    [8] -> 17
+    [8] -> C -18- True ~ C -14- False
+    [13] -> 18
+    [14] -> 18
+    [15] -> 6
+    [16] -> 7
+    [17] -> 8
+    [18] -> 13
+    [18] -> 14
+    [18] -> True ~ False
+    [18] -> True ~ True
+
+-> iteration 3
+
+### Final solution ###
+
+  1 -> E
+  2 -> I
+  3 -> I
+  4 -> I
+  5 -> R
+  6 -> E
+  7 -> E
+  8 -> E
+  9 -> R
+  10 -> I
+  11 -> I
+  12 -> I
+  13 -> I
+  14 -> I
+  15 -> E
+  16 -> E
+  17 -> E
+  18 -> I
+  19 -> E
+  20 -> E
+  21 -> I
+  22 -> R
+
+### Fully annotated program ###
+
+\Bool :E Type.
+  \True :I Bool.
+    \False :I Bool.
+      \Eq :I (a :E Type) -> (x :E a) -> (y :E a) -> Type.
+        \Refl :R (a :E Type) -> (x :E a) -> Eq -E- a -E- x -E- x.
+          \the :R (a :I Type) -> (x :R a) -> a.
+            \T :I Type.
+              \C :I (x :I Bool) -> T.
+                the -I- (Eq -E- T -E- (C -I- True) -E- (C -I- False)) -R- (Refl -E- T -E- (C -I- True))
+
+### Erase: irrelevant data ###
+
+\Bool : Type.
+  \Refl : (a : Type) -> (x : a) -> Eq a x x.
+    \the : (x : a) -> a.
+      the (Refl T C)
+
+### Erase: non-runtime data ###
+
+\Refl the.
+  the Refl
