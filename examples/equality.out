@@ -17,14 +17,6 @@
   [] -> 9
   [] -> Eq -6- T -7- (C -17- True) -8- (C -17- True) ~ Eq -14- T -15- (C -12- True) -16- (C -13- False)
   [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
   [6] -> E
   [6,E] -> E
   [7] -> E
@@ -53,7 +45,6 @@
   [20] -> 4
   [20] -> E
   [20] -> T ~ T
-  [20] -> T ~ T
   [20] -> Type ~ Type
   [21] -> 5
   [21] -> R
@@ -76,15 +67,6 @@
   [E] -> 20
   [E] -> E
   [E] -> a ~ a
-  [E] -> a ~ a
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
   [E] -> Type ~ Type
   [R] -> 21
 
@@ -111,33 +93,9 @@
 
   rechecking eqs:
     Bool ~ Bool
-    Bool ~ Bool
-    Bool ~ Bool
-    T ~ T
     T ~ T
     a ~ a
-    a ~ a
-    Type ~ Type
-    Type ~ Type
-    T ~ T
-    Type ~ Type
     Eq -6- T -7- (C -17- True) -8- (C -17- True) ~ Eq -14- T -15- (C -12- True) -16- (C -13- False)
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
     Type ~ Type
 
   new constraints from conversion:
@@ -156,36 +114,11 @@
 
   rechecking eqs:
     Bool ~ Bool
-    Bool ~ Bool
-    Bool ~ Bool
-    T ~ T
     T ~ T
     a ~ a
-    a ~ a
-    Type ~ Type
-    Type ~ Type
-    T ~ T
-    Type ~ Type
-    T ~ T
     Eq -6- T -7- (C -17- True) -8- (C -17- True) ~ Eq -14- T -15- (C -12- True) -16- (C -13- False)
     C -17- True ~ C -12- True
     C -17- True ~ C -13- False
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
     Type ~ Type
 
   new constraints from conversion:

@@ -25,7 +25,15 @@ instance Show Evar where
 
 type Env r = M.Map Name (r, TT r)
 
-data ConstrRHS = CEV Evar | CEq [String] (TT Evar) (TT Evar) deriving (Eq, Ord)
+newtype Backtrace = BT { btLines :: [String] }
+
+instance Eq Backtrace where
+    _ == _ = True
+
+instance Ord Backtrace where
+    compare _ _ = EQ
+
+data ConstrRHS = CEV Evar | CEq Backtrace (TT Evar) (TT Evar) deriving (Eq, Ord)
 
 instance Show ConstrRHS where
     show (CEV v) = show v
@@ -44,7 +52,7 @@ type Type = TT Evar
 data TCEnv = TCEnv
     { tcEnv :: Env Evar
     , tcGuards :: S.Set Evar
-    , tcBacktrace :: [String]
+    , tcBacktrace :: Backtrace
     }
 
 data TCErrMsg
@@ -55,13 +63,13 @@ data TCErrMsg
 
 data TCFailure = TCFailure
     { tcfMessage :: TCErrMsg
-    , tcfBacktrace :: [String]
+    , tcfBacktrace :: Backtrace
     }
     deriving (Eq, Ord)
 
 instance Show TCFailure where
-    show TCFailure{tcfMessage, tcfBacktrace} =
-        "With backtrace:\n" ++ unlines (map ("  "++) $ reverse tcfBacktrace)
+    show TCFailure{tcfMessage, tcfBacktrace = BT bt} =
+        "With backtrace:\n" ++ unlines (map ("  "++) $ reverse bt)
         ++ "!! " ++ show tcfMessage
 
 newtype TCState = TCState { freshI :: Int }
@@ -80,8 +88,8 @@ tcfail err = do
 
 bt :: Show a => a -> TC b -> TC b
 bt item = local $
-    \(TCEnv env gs bt)
-        -> TCEnv env gs (show item : bt)
+    \(TCEnv env gs (BT bt))
+        -> TCEnv env gs $ BT (show item : bt)
 
 given :: Evar -> TC b -> TC b
 given g = local $
@@ -149,4 +157,4 @@ inferTm (App r f x) = bt ("APP", f) $ do
 inferTm Type = pure Type
 
 infer :: Term -> Either TCFailure (Type, Constrs)
-infer tm = runExcept $ evalRWST (inferTm tm) (TCEnv M.empty [] []) TCState{freshI = 0}
+infer tm = runExcept $ evalRWST (inferTm tm) (TCEnv M.empty [] $ BT []) TCState{freshI = 0}

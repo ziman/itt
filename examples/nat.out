@@ -12,8 +12,6 @@
   [] -> 3
   [] -> Nat ~ Nat
   [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
   [4] -> 2
   [4] -> R
   [E] -> 1
@@ -31,9 +29,6 @@
 
   rechecking eqs:
     Nat ~ Nat
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
     Type ~ Type
 
   new constraints from conversion:

@@ -20,14 +20,14 @@ fill evars (App r f x) = App (fillR evars r) (fill evars f) (fill evars x)
 fill evars Type = Type
 
 data ConvErr
-    = CantConvert [String] Term Term
+    = CantConvert Backtrace Term Term
     deriving (Eq, Ord)
 
 instance Show ConvErr where
-    show (CantConvert bt p q) = "With backtrace:\n" ++ unlines (map ("  "++) $ reverse bt)
+    show (CantConvert (BT bt) p q) = "With backtrace:\n" ++ unlines (map ("  "++) $ reverse bt)
         ++ "!! can't convert " ++ show p ++ " ~ " ++ show q
 
-conv :: [String] -> Term -> Term -> Except ConvErr Constrs
+conv :: Backtrace -> Term -> Term -> Except ConvErr Constrs
 conv bt (V n) (V n') | n == n' = return S.empty
 conv bt (Lam n r ty rhs) (Lam n' r' ty' rhs') = do
     tycs  <- conv bt ty ty'

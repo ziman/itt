@@ -18,14 +18,6 @@
   [] -> 7
   [] -> U -13- (C -12- b) ~ U -9- (C -8- True)
   [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
   [8] -> I
   [8,9,E] -> 2
   [9] -> E
@@ -46,9 +38,6 @@
   [E] -> 9
   [E] -> 13
   [E] -> T ~ T
-  [E] -> T ~ T
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
   [E] -> Type ~ Type
   [R] -> 14
 
@@ -68,21 +57,8 @@
 
   rechecking eqs:
     Bool ~ Bool
-    Bool ~ Bool
-    T ~ T
     T ~ T
     U -13- (C -12- b) ~ U -9- (C -8- True)
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
     Type ~ Type
 
   new constraints from conversion:
@@ -95,22 +71,9 @@
 
   rechecking eqs:
     Bool ~ Bool
-    Bool ~ Bool
-    T ~ T
     T ~ T
     C -12- b ~ C -8- True
     U -13- (C -12- b) ~ U -9- (C -8- True)
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
     Type ~ Type
 
   new constraints from conversion:

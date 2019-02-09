@@ -16,18 +16,9 @@
 ### Constraints ###
 
   [] -> 14
-  [] -> Vect -20- (S -19- Z) -21- Bool ~ Vect -17- (S -22- Z) -18- Bool
   [] -> Bool ~ Bool
   [] -> Nat ~ Nat
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
-  [] -> Type ~ Type
+  [] -> Vect -20- (S -19- Z) -21- Bool ~ Vect -17- (S -22- Z) -18- Bool
   [] -> Type ~ Type
   [8] -> 12
   [8] -> 17
@@ -77,27 +68,15 @@
   [30] -> R
   [31] -> 14
   [31] -> R
-  [31] -> Vect -12- Z -13- Bool ~ Vect -17- Z -18- Bool
   [31] -> Bool ~ Bool
   [31] -> Nat ~ Nat
+  [31] -> Vect -12- Z -13- Bool ~ Vect -17- Z -18- Bool
   [31] -> Type ~ Type
   [E] -> 1
   [E] -> 4
   [E] -> 7
   [E] -> 15
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
   [E] -> Nat ~ Nat
-  [E] -> Nat ~ Nat
-  [E] -> Nat ~ Nat
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
-  [E] -> Type ~ Type
   [E] -> Type ~ Type
   [R] -> 19
   [R] -> 22
@@ -124,37 +103,10 @@
     31 -> R
 
   rechecking eqs:
+    Bool ~ Bool
+    Nat ~ Nat
     Vect -12- Z -13- Bool ~ Vect -17- Z -18- Bool
-    Bool ~ Bool
-    Nat ~ Nat
     Vect -20- (S -19- Z) -21- Bool ~ Vect -17- (S -22- Z) -18- Bool
-    Bool ~ Bool
-    Nat ~ Nat
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Nat ~ Nat
-    Nat ~ Nat
-    Nat ~ Nat
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
-    Type ~ Type
     Type ~ Type
 
   new constraints from conversion:
