@@ -67,7 +67,7 @@ lam = do
 
 pi :: Parser Term
 pi = do
-    (n, r, ty) <- parens nrty
+    (n, r, ty) <- try ((,,) <$> (kwd "(" *> name) <*> evar) <*> (term <* kwd ")")
     kwd "->"
     rhs <- term
     return $ Pi n r ty rhs

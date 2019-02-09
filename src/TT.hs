@@ -39,7 +39,7 @@ data TT r
     | Pi  Name r (TT r) (TT r)
     | App r (TT r) (TT r)
     | Type
-    deriving (Eq, Ord, Show)
+    deriving (Eq, Ord)
 
 instance Pretty () where
     pretty () = mempty
@@ -58,6 +58,9 @@ instance PrettyR r => Pretty (TT r) where
         | (f, xs) <- unApp [] tm
         = wrap f <+> hsep [prettyApp r <+> wrap x | (r, x) <- xs]
     pretty Type = text "Type"
+
+instance PrettyR r => Show (TT r) where
+    show = prettyShow
 
 unLam :: TT r -> ([Name], TT r)
 unLam (Lam n r (V Erased) rhs) = case unLam rhs of
