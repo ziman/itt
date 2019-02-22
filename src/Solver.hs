@@ -57,7 +57,7 @@ solve cs evars
     addConstr c@(gs :-> CEV (Q q))
         | vals evars gs <= q = id
         | otherwise    = error $ "inconsistent constraint: " ++ show c
-    addConstr (gs :-> CEV (EV i)) = M.insert i (vals evars gs)
+    addConstr (gs :-> CEV (EV i)) = M.insertWith max i (vals evars gs)
     addConstr (gs :-> (CEq _ _ _)) = id
 
 val :: M.Map Int Q -> Evar -> Q
