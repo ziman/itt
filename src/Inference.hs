@@ -146,7 +146,7 @@ inferTm (Pi n r ty rhs) = bt ("PI", n) $ do
     tyty <- given (Q E) $ inferTm ty
     tyty ~= Type
 
-    rty <- with (n, r, ty) $ given (Q E) $ inferTm rhs
+    rty <- with (n, r, ty) $ {- given (Q E) $ -} inferTm rhs
     rty ~= Type
 
     return Type
