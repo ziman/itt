@@ -9,14 +9,17 @@
 
 ### Constraints ###
 
-  [] -> 3
   [] -> Nat ~ Nat
   [] -> Type ~ Type
-  [4] -> 2
-  [4] -> R
-  [E] -> 1
   [E] -> Type ~ Type
-  [R] -> 4
+
+  [E] -> 1
+  [E] -> 1
+  [E] -> 1
+  [] -> 3
+  [4] -> 2
+
+  (4,R)
 
 ### Solving ###
 
@@ -24,7 +27,7 @@
   evar updates:
     1 -> E
     2 -> R
-    3 -> R
+    3 -> L
     4 -> R
 
   rechecking eqs:
@@ -33,20 +36,22 @@
 
   new constraints from conversion:
 
+
+
 -> iteration 2
 
 ### Final solution ###
 
   1 -> E
   2 -> R
-  3 -> R
+  3 -> L
   4 -> R
 
 ### Fully annotated program ###
 
 \Nat :E Type.
   \Z :R Nat.
-    \S :R (n :R Nat) -> Nat.
+    \S :L (n :R Nat) -> Nat.
       S -R- Z
 
 ### Erase: irrelevant data ###

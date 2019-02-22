@@ -8,181 +8,213 @@
           \S :6 (n :R Nat) -> Nat.
             \Vect :7 (n :8 Nat) -> (a :9 Type) -> Type.
               \Nil :10 (a :11 Type) -> Vect -12- Z -13- a.
-                \Cons :14 (a :15 Type) -> (n :16 Nat) -> (x :R a) -> (xs :R Vect -17- n -18- a) -> Vect -20- (S -19- n) -21- a.
-                  Cons -28- Bool -29- (S -22- Z) -30- T -31- (Cons -24- Bool -25- Z -26- F -27- (Nil -23- Bool))
+                \Cons :14 (a :15 Type) -> (n :16 Nat) -> (x :L a) -> (xs :L Vect -17- n -18- a) -> Vect -20- (S -19- n) -21- a.
+                  \b :22 Bool.
+                    Cons -35- Bool -36- (S -24- (S -23- Z)) -37- T -38- (Cons -31- Bool -32- (S -25- Z) -33- b -34- (Cons -27- Bool -28- Z -29- F -30- (Nil -26- Bool)))
 
-  : (Bool :1 Type) -> (T :2 Bool) -> (F :3 Bool) -> (Nat :4 Type) -> (Z :5 Nat) -> (S :6 (n :R Nat) -> Nat) -> (Vect :7 (n :8 Nat) -> (a :9 Type) -> Type) -> (Nil :10 (a :11 Type) -> Vect -12- Z -13- a) -> (Cons :14 (a :15 Type) -> (n :16 Nat) -> (x :R a) -> (xs :R Vect -17- n -18- a) -> Vect -20- (S -19- n) -21- a) -> Vect -20- (S -19- (S -22- Z)) -21- Bool
+  : (Bool :1 Type) -> (T :2 Bool) -> (F :3 Bool) -> (Nat :4 Type) -> (Z :5 Nat) -> (S :6 (n :R Nat) -> Nat) -> (Vect :7 (n :8 Nat) -> (a :9 Type) -> Type) -> (Nil :10 (a :11 Type) -> Vect -12- Z -13- a) -> (Cons :14 (a :15 Type) -> (n :16 Nat) -> (x :L a) -> (xs :L Vect -17- n -18- a) -> Vect -20- (S -19- n) -21- a) -> (b :22 Bool) -> Vect -20- (S -19- (S -24- (S -23- Z))) -21- Bool
 
 ### Constraints ###
 
-  [] -> 14
   [] -> Bool ~ Bool
   [] -> Nat ~ Nat
-  [] -> Vect -20- (S -19- Z) -21- Bool ~ Vect -17- (S -22- Z) -18- Bool
+  [] -> Vect -20- (S -19- (S -25- Z)) -21- Bool ~ Vect -17- (S -24- (S -23- Z)) -18- Bool
   [] -> Type ~ Type
-  [8] -> 12
-  [8] -> 17
-  [8] -> 20
-  [9] -> 13
-  [9] -> 18
-  [9] -> 21
-  [11] -> 23
-  [12] -> 8
-  [12,E] -> 5
-  [13] -> 9
-  [13,E] -> 11
-  [15] -> 24
-  [15] -> 28
-  [16] -> 25
-  [16] -> 29
-  [17] -> 8
-  [17,E] -> 16
-  [18] -> 9
-  [18,E] -> 15
-  [19] -> R
-  [19,20,E] -> 16
-  [20] -> 8
-  [20,E] -> 6
   [20,E] -> Nat ~ Nat
-  [21] -> 9
-  [21,E] -> 15
-  [22] -> R
-  [22,29] -> 5
-  [23] -> 11
-  [23,27,31] -> 1
-  [24] -> 15
-  [24,31] -> 1
-  [25] -> 16
-  [25,31] -> 5
-  [26] -> R
-  [26,31] -> 3
-  [27] -> R
-  [27,31] -> 10
-  [27,31] -> Type ~ Type
-  [28] -> 1
-  [28] -> 15
-  [29] -> 6
-  [29] -> 16
-  [29] -> Nat ~ Nat
-  [30] -> 2
-  [30] -> R
-  [31] -> 14
-  [31] -> R
-  [31] -> Bool ~ Bool
-  [31] -> Nat ~ Nat
-  [31] -> Vect -12- Z -13- Bool ~ Vect -17- Z -18- Bool
-  [31] -> Type ~ Type
-  [E] -> 1
-  [E] -> 4
-  [E] -> 7
-  [E] -> 15
+  [24,36] -> Nat ~ Nat
+  [30,34,38] -> Type ~ Type
+  [32,38] -> Nat ~ Nat
+  [34,38] -> Bool ~ Bool
+  [34,38] -> Nat ~ Nat
+  [34,38] -> Vect -12- Z -13- Bool ~ Vect -17- Z -18- Bool
+  [34,38] -> Type ~ Type
+  [36] -> Nat ~ Nat
+  [38] -> Bool ~ Bool
+  [38] -> Nat ~ Nat
+  [38] -> Vect -20- (S -19- Z) -21- Bool ~ Vect -17- (S -25- Z) -18- Bool
+  [38] -> Type ~ Type
   [E] -> Nat ~ Nat
   [E] -> Type ~ Type
-  [R] -> 19
-  [R] -> 22
-  [R] -> 26
-  [R] -> 27
-  [R] -> 30
-  [R] -> 31
+
+  [E] -> 1
+  [E] -> 1
+  [E] -> 4
+  [E] -> 4
+  [E] -> 4
+  [E] -> 4
+  [E] -> 7
+  [12,E] -> 5
+  [13,E] -> 11
+  [E] -> 4
+  [E] -> 15
+  [E] -> 7
+  [17,E] -> 16
+  [18,E] -> 15
+  [E] -> 7
+  [20,E] -> 6
+  [19,20,E] -> 16
+  [21,E] -> 15
+  [E] -> 1
+  [] -> 14
+  [35] -> 1
+  [36] -> 6
+  [24,36] -> 6
+  [23,24,36] -> 5
+  [37] -> 2
+  [38] -> 14
+  [31,38] -> 1
+  [32,38] -> 6
+  [25,32,38] -> 5
+  [33,38] -> 22
+  [34,38] -> 14
+  [27,34,38] -> 1
+  [28,34,38] -> 5
+  [29,34,38] -> 3
+  [30,34,38] -> 10
+  [26,30,34,38] -> 1
+
+  (8,12)
+  (8,17)
+  (8,20)
+  (9,13)
+  (9,18)
+  (9,21)
+  (11,26)
+  (15,27)
+  (15,31)
+  (15,35)
+  (16,28)
+  (16,32)
+  (16,36)
+  (19,R)
+  (23,R)
+  (24,R)
+  (25,R)
+  (29,L)
+  (30,L)
+  (33,L)
+  (34,L)
+  (37,L)
+  (38,L)
 
 ### Solving ###
 
 -> iteration 1
   evar updates:
-    2 -> R
-    3 -> R
+    1 -> E
+    2 -> L
+    3 -> L
     4 -> E
     7 -> E
-    10 -> R
+    10 -> L
     14 -> R
+    15 -> E
     19 -> R
-    22 -> R
-    26 -> R
-    27 -> R
-    30 -> R
-    31 -> R
+    22 -> L
+    23 -> R
+    24 -> R
+    25 -> R
+    27 -> E
+    29 -> L
+    30 -> L
+    31 -> E
+    33 -> L
+    34 -> L
+    35 -> E
+    37 -> L
+    38 -> L
 
   rechecking eqs:
     Bool ~ Bool
     Nat ~ Nat
     Vect -12- Z -13- Bool ~ Vect -17- Z -18- Bool
-    Vect -20- (S -19- Z) -21- Bool ~ Vect -17- (S -22- Z) -18- Bool
+    Vect -20- (S -19- Z) -21- Bool ~ Vect -17- (S -25- Z) -18- Bool
+    Vect -20- (S -19- (S -25- Z)) -21- Bool ~ Vect -17- (S -24- (S -23- Z)) -18- Bool
     Type ~ Type
 
   new constraints from conversion:
-    [12] -> 17
     [12] -> Z ~ Z
-    [13] -> 18
     [13] -> Bool ~ Bool
-    [17] -> 12
-    [17] -> 20
-    [18] -> 13
-    [18] -> 21
-    [20] -> 17
-    [20] -> S -19- Z ~ S -22- Z
-    [21] -> 18
+    [20] -> S -19- Z ~ S -25- Z
+    [20] -> S -19- (S -25- Z) ~ S -24- (S -23- Z)
     [21] -> Bool ~ Bool
+
+
+    (12,17)
+    (13,18)
+    (20,17)
+    (21,18)
 
 -> iteration 2
 
 ### Final solution ###
 
-  1 -> I
-  2 -> R
-  3 -> R
+  1 -> E
+  2 -> L
+  3 -> L
   4 -> E
   5 -> I
   6 -> I
   7 -> E
   8 -> I
   9 -> I
-  10 -> R
+  10 -> L
   11 -> I
   12 -> I
   13 -> I
   14 -> R
-  15 -> I
+  15 -> E
   16 -> I
   17 -> I
   18 -> I
   19 -> R
   20 -> I
   21 -> I
-  22 -> R
-  23 -> I
-  24 -> I
-  25 -> I
-  26 -> R
-  27 -> R
+  22 -> L
+  23 -> R
+  24 -> R
+  25 -> R
+  26 -> I
+  27 -> E
   28 -> I
-  29 -> I
-  30 -> R
-  31 -> R
+  29 -> L
+  30 -> L
+  31 -> E
+  32 -> I
+  33 -> L
+  34 -> L
+  35 -> E
+  36 -> I
+  37 -> L
+  38 -> L
 
 ### Fully annotated program ###
 
-\Bool :I Type.
-  \T :R Bool.
-    \F :R Bool.
+\Bool :E Type.
+  \T :L Bool.
+    \F :L Bool.
       \Nat :E Type.
         \Z :I Nat.
           \S :I (n :R Nat) -> Nat.
             \Vect :E (n :I Nat) -> (a :I Type) -> Type.
-              \Nil :R (a :I Type) -> Vect -I- Z -I- a.
-                \Cons :R (a :I Type) -> (n :I Nat) -> (x :R a) -> (xs :R Vect -I- n -I- a) -> Vect -I- (S -R- n) -I- a.
-                  Cons -I- Bool -I- (S -R- Z) -R- T -R- (Cons -I- Bool -I- Z -R- F -R- (Nil -I- Bool))
+              \Nil :L (a :I Type) -> Vect -I- Z -I- a.
+                \Cons :R (a :E Type) -> (n :I Nat) -> (x :L a) -> (xs :L Vect -I- n -I- a) -> Vect -I- (S -R- n) -I- a.
+                  \b :L Bool.
+                    Cons -E- Bool -I- (S -R- (S -R- Z)) -L- T -L- (Cons -E- Bool -I- (S -R- Z) -L- b -L- (Cons -E- Bool -I- Z -L- F -L- (Nil -I- Bool)))
 
 ### Erase: irrelevant data ###
 
-\T : Bool.
-  \F : Bool.
-    \Nat : Type.
-      \Vect : Type.
-        \Nil : Vect.
-          \Cons : (x : a) -> (xs : Vect) -> Vect.
-            Cons T (Cons F Nil)
+\Bool : Type.
+  \T : Bool.
+    \F : Bool.
+      \Nat : Type.
+        \Vect : Type.
+          \Nil : Vect.
+            \Cons : (a : Type) -> (x : a) -> (xs : Vect) -> Vect.
+              \b : Bool.
+                Cons Bool T (Cons Bool b (Cons Bool F Nil))
 
 ### Erase: non-runtime data ###
 
-\T F Nil Cons.
-  Cons T (Cons F Nil)
+\T F Nil Cons b.
+  Cons T (Cons b (Cons F Nil))

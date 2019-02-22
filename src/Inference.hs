@@ -37,7 +37,19 @@ instance Show Backtrace where
     show _ = "_bt"
 
 infixr 3 :->
-data (:->) a b = (:->) a b deriving (Eq, Ord, Show)
+data (:->) a b = (:->) a b deriving (Eq, Ord)
+
+class ShowRHS a where
+    showRHS :: a -> String
+
+instance ShowRHS (Backtrace, TT Evar, TT Evar) where
+    showRHS (_bt, lhs, rhs) = show lhs ++ " ~ " ++ show rhs
+
+instance ShowRHS Evar where
+    showRHS = show
+
+instance ShowRHS b => Show (S.Set Evar :-> b) where
+    show (gs :-> y) = show (S.toList gs) ++ " -> " ++ showRHS y
 
 data Constrs = Constrs
     { csConvs :: S.Set (S.Set Evar :-> (Backtrace, TT Evar, TT Evar))

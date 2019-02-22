@@ -17,7 +17,7 @@ solveSBV cs =
     optimizeWith defaultSMTCfg{verbose} Lexicographic (goal cs) >>= \case
         result@(LexicographicResult r)
             | modelExists r -> do
-                print result
+                -- print result
 
                 let pairs = sequence
                         [(i,) . qs <$> getModelValue ("e" ++ show i) r

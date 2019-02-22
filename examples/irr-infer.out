@@ -15,31 +15,34 @@
 
 ### Constraints ###
 
-  [] -> 7
   [] -> U -13- (C -12- b) ~ U -9- (C -8- True)
   [] -> Type ~ Type
-  [8] -> I
-  [8,9,E] -> 2
-  [9] -> E
-  [9,E] -> 5
   [9,E] -> Bool ~ Bool
-  [12] -> I
-  [12,13,E] -> 10
-  [13] -> E
-  [13,E] -> 5
   [13,E] -> Bool ~ Bool
-  [14] -> 11
-  [14] -> R
-  [I] -> 8
-  [I] -> 12
-  [E] -> 1
-  [E] -> 4
-  [E] -> 6
-  [E] -> 9
-  [E] -> 13
   [E] -> T ~ T
   [E] -> Type ~ Type
-  [R] -> 14
+
+  [E] -> 1
+  [E] -> 1
+  [E] -> 1
+  [E] -> 4
+  [E] -> 4
+  [E] -> 6
+  [9,E] -> 5
+  [8,9,E] -> 2
+  [E] -> 1
+  [E] -> 1
+  [E] -> 6
+  [13,E] -> 5
+  [12,13,E] -> 10
+  [] -> 7
+  [14] -> 11
+
+  (8,I)
+  (9,E)
+  (12,I)
+  (13,E)
+  (14,R)
 
 ### Solving ###
 
@@ -49,7 +52,7 @@
     4 -> E
     5 -> E
     6 -> E
-    7 -> R
+    7 -> L
     9 -> E
     11 -> R
     13 -> E
@@ -62,9 +65,10 @@
     Type ~ Type
 
   new constraints from conversion:
-    [9] -> 13
-    [13] -> 9
     [13] -> C -12- b ~ C -8- True
+
+
+    (13,9)
 
 -> iteration 2
   evar updates:
@@ -77,12 +81,12 @@
     Type ~ Type
 
   new constraints from conversion:
-    [8] -> 12
-    [9] -> 13
-    [12] -> 8
     [12] -> b ~ True
-    [13] -> 9
     [13] -> C -12- b ~ C -8- True
+
+
+    (12,8)
+    (13,9)
 
 -> iteration 3
 
@@ -93,7 +97,7 @@
   4 -> E
   5 -> E
   6 -> E
-  7 -> R
+  7 -> L
   8 -> I
   9 -> E
   10 -> I
@@ -110,7 +114,7 @@
       \T :E Type.
         \C :E (pf :I Bool) -> T.
           \U :E (t :E T) -> Type.
-            \g :R (x :R U -E- (C -I- True)) -> Bool.
+            \g :L (x :R U -E- (C -I- True)) -> Bool.
               \b :I Bool.
                 \d :R U -E- (C -I- b).
                   g -R- d
