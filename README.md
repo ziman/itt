@@ -22,6 +22,20 @@ You'll probably want to override this to give more meaning to your primitives.
 You can look at [one of the example programs](https://github.com/ziman/itt/blob/master/examples/irr-infer.tt)
 and [the corresponding output](https://github.com/ziman/itt/blob/master/examples/irr-infer.out).
 
+## Making it easier
+
+Inference gets easier if you don't need to support all modalities.
+
+* **I** requires interleaving typechecking and constraint solving.
+
+* **L** requires counting of constraints,
+  which interferes with evar equalities.
+  I use an external SMT solver to get it done cheaply but
+  it wouldn't be very hard to do internally with a bit of effort.
+
+If you leave out either of the two, you get an easier problem to solve
+when inferring annotations.
+
 ## Usage
 
 Either install `itt`:
