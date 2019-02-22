@@ -12,10 +12,27 @@ import qualified Data.Map as M
 import TT
 import Inference
 
-solveSBV :: Constrs -> IO (M.Map Int Q)
-solveSBV cs = do
-    print =<< optimizeWith defaultSMTCfg{verbose} Lexicographic (goal cs)
-    return []
+solveSBV :: Constrs -> IO (Maybe (M.Map Int Q))
+solveSBV cs =
+    optimizeWith defaultSMTCfg{verbose} Lexicographic (goal cs) >>= \case
+        result@(LexicographicResult r)
+            | modelExists r -> do
+                print result
+
+                let pairs = sequence
+                        [(i,) . qs <$> getModelValue ("e" ++ show i) r
+                        | EV i <- S.toList $ evars cs
+                        ]
+
+                return $ case pairs of
+                    Nothing -> error $ "not all evars have value (?!?)"
+                    Just ps -> Just $ M.fromList ps
+
+            | otherwise -> do
+                print result
+                return Nothing
+
+        result -> error $ "strange SAT result: " ++ show result
   where
     verbose = True
 
@@ -28,6 +45,12 @@ sq I = I_
 sq E = E_
 sq L = L_
 sq R = R_
+
+qs :: Q_ -> Q
+qs I_ = I
+qs E_ = E
+qs L_ = L
+qs R_ = R
 
 allQ :: [Q]
 allQ = [I, E, L, R]
