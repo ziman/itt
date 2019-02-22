@@ -60,7 +60,7 @@ check tm = case infer tm of
                                 putStrLn "  new constraints from conversion:"
                                 putStrLn $ unlines ["    " ++ show c | c <- S.toList $ csConvs cs']
                                 putStrLn $ unlines ["    " ++ show c | c <- csImpls cs']
-                                putStrLn $ unlines ["    " ++ show c | c <- S.toList $ csEqs cs']
+                                putStrLn $ unlines ["    " ++ show p ++ " = " ++ show q | (p, q) <- S.toList $ csEqs cs']
                                 iter (i+1) (cs' <> cs) ee'
 
         evars <- iter 1 cs ([], [])

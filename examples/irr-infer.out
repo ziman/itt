@@ -68,7 +68,7 @@
     [13] -> C -12- b ~ C -8- True
 
 
-    (13,9)
+    13 = 9
 
 -> iteration 2
   evar updates:
@@ -85,8 +85,8 @@
     [13] -> C -12- b ~ C -8- True
 
 
-    (12,8)
-    (13,9)
+    12 = 8
+    13 = 9
 
 -> iteration 3
 
