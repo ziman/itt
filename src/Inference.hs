@@ -33,18 +33,21 @@ instance Eq Backtrace where
 instance Ord Backtrace where
     compare _ _ = EQ
 
-data ConstrRHS = CEV Evar | CEq Backtrace (TT Evar) (TT Evar) deriving (Eq, Ord)
+infixr 3 :->
+data (:->) a b = (:->) a b deriving (Eq, Ord, Show)
 
-instance Show ConstrRHS where
-    show (CEV v) = show v
-    show (CEq _bt p q) = show p ++ " ~ " ++ show q
+data Constrs = Constrs
+    { csConvs :: S.Set (S.Set Evar :-> (Backtrace, TT Evar, TT Evar))
+    , csImpls :: [S.Set Evar :-> Evar]
+    , csEqs   :: S.Set (Evar, Evar)
+    }
 
-data Constr = (:->) (S.Set Evar) ConstrRHS deriving (Eq, Ord)
+instance Semigroup Constrs where
+    Constrs cs is es <> Constrs cs' is' es'
+        = Constrs (cs <> cs') (is <> is') (es <> es')
 
-instance Show Constr where
-    show (gs :-> rhs) = show (S.toList gs) ++ " -> " ++ show rhs
-
-type Constrs = S.Set Constr
+instance Monoid Constrs where
+    mempty = Constrs [] [] []
 
 type Term = TT Evar
 type Type = TT Evar
@@ -103,18 +106,33 @@ lookup n = do
         Nothing -> tcfail $ UnknownVar n
         Just rty -> return rty
 
-assert :: ConstrRHS -> TC ()
-assert cr = do
-    gs <- tcGuards <$> ask
-    tell [gs :-> cr]
-
 (~=) :: Term -> Term -> TC ()
 l ~= r = do
+    gs <- tcGuards    <$> ask
     bt <- tcBacktrace <$> ask
-    assert $ CEq bt (rnf l) (rnf r)
+    tell Constrs
+        { csConvs = [gs :-> (bt, l, r)]
+        , csImpls = []
+        , csEqs   = []
+        }
+
+budget :: Evar -> TC ()
+budget r = do
+    gs <- tcGuards <$> ask
+    tell Constrs
+        { csConvs = []
+        , csImpls = [gs :-> r]
+        , csEqs   = []
+        }
 
 (<->) :: Evar -> Evar -> TC ()
-p <-> q = tell [[p] :-> CEV q, [q] :-> CEV p]
+p <-> q = do
+    bt <- tcBacktrace <$> ask
+    tell Constrs
+        { csConvs = []
+        , csImpls = []
+        , csEqs   = [(min p q, max p q)]
+        }
 
 with :: (Name, Evar, Type) -> TC b -> TC b
 with (n, r, ty) = local $
@@ -124,7 +142,7 @@ with (n, r, ty) = local $
 inferTm :: Term -> TC Type
 inferTm (V n) = bt ("VAR", n) $ do
     (r, ty) <- lookup n
-    assert (CEV r)
+    budget r
     return ty    
 
 inferTm (Lam n r ty rhs) = bt ("LAM", n) $ do

@@ -28,22 +28,22 @@ instance Show ConvErr where
         ++ "!! can't convert " ++ show p ++ " ~ " ++ show q
 
 conv :: Backtrace -> Term -> Term -> Except ConvErr Constrs
-conv bt (V n) (V n') | n == n' = return S.empty
+conv bt (V n) (V n') | n == n' = return []
 conv bt (Lam n r ty rhs) (Lam n' r' ty' rhs') = do
     tycs  <- conv bt ty ty'
     rhscs <- conv bt rhs $ subst n' (V n) rhs'
-    return $ tycs `S.union` rhscs `S.union` [[r] :-> CEV r', [r'] :-> CEV r]
+    return $ tycs <> rhscs <> [r :~= r']
 
 conv bt (Pi n r ty rhs) (Pi n' r' ty' rhs') = do
     tycs  <- conv bt ty ty'
     rhscs <- conv bt rhs $ subst n' (V n) rhs'
-    return $ tycs `S.union` rhscs `S.union` [[r] :-> CEV r', [r'] :-> CEV r]
+    return $ tycs <> rhscs <> [r :~= r']
 
 conv bt (App r f x) (App r' f' x') = do
     fcs <- conv bt f f'
-    return $ fcs `S.union` [[r] :-> CEV r', [r'] :-> CEV r, [r] :-> (CEq bt x x')]
+    return $ fcs <> [r :~= r', [r] :-> (CEq bt x x')]
 
-conv _bt Type Type = return S.empty
+conv _bt Type Type = return []
 
 conv bt p q = throwE $ CantConvert bt p q
 
