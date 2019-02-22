@@ -4,7 +4,7 @@
 
 \Nat : Type.
 \Z : Nat.
-\S : (n :R Nat) -> Nat.
+\S : (n :L Nat) -> Nat.
 
 \Vect : (n : Nat) -> (a : Type) -> Type.
 \Nil : (a : Type) -> Vect Z a.

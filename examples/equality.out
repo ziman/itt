@@ -5,12 +5,12 @@
     \False :3 Bool.
       \Eq :4 (a :E Type) -> (x :E a) -> (y :E a) -> Type.
         \Refl :5 (a :E Type) -> (x :E a) -> Eq -6- a -7- x -8- x.
-          \the :9 (a :E Type) -> (x :R a) -> a.
+          \the :9 (a :E Type) -> (x :L a) -> a.
             \T :10 Type.
               \C :11 (x :I Bool) -> T.
                 the -20- (Eq -14- T -15- (C -12- True) -16- (C -13- False)) -21- (Refl -18- T -19- (C -17- True))
 
-  : (Bool :1 Type) -> (True :2 Bool) -> (False :3 Bool) -> (Eq :4 (a :E Type) -> (x :E a) -> (y :E a) -> Type) -> (Refl :5 (a :E Type) -> (x :E a) -> Eq -6- a -7- x -8- x) -> (the :9 (a :E Type) -> (x :R a) -> a) -> (T :10 Type) -> (C :11 (x :I Bool) -> T) -> Eq -14- T -15- (C -12- True) -16- (C -13- False)
+  : (Bool :1 Type) -> (True :2 Bool) -> (False :3 Bool) -> (Eq :4 (a :E Type) -> (x :E a) -> (y :E a) -> Type) -> (Refl :5 (a :E Type) -> (x :E a) -> Eq -6- a -7- x -8- x) -> (the :9 (a :E Type) -> (x :L a) -> a) -> (T :10 Type) -> (C :11 (x :I Bool) -> T) -> Eq -14- T -15- (C -12- True) -16- (C -13- False)
 
 ### Constraints ###
 
@@ -63,7 +63,7 @@
   (18,E)
   (19,E)
   (20,E)
-  (21,R)
+  (21,L)
 
 ### Solving ###
 
@@ -71,7 +71,7 @@
   evar updates:
     1 -> E
     4 -> E
-    5 -> R
+    5 -> L
     6 -> E
     7 -> E
     8 -> E
@@ -84,7 +84,7 @@
     18 -> E
     19 -> E
     20 -> E
-    21 -> R
+    21 -> L
 
   rechecking eqs:
     Bool ~ Bool
@@ -137,7 +137,7 @@
   2 -> I
   3 -> I
   4 -> E
-  5 -> R
+  5 -> L
   6 -> E
   7 -> E
   8 -> E
@@ -153,7 +153,7 @@
   18 -> E
   19 -> E
   20 -> E
-  21 -> R
+  21 -> L
 
 ### Fully annotated program ###
 
@@ -161,11 +161,11 @@
   \True :I Bool.
     \False :I Bool.
       \Eq :E (a :E Type) -> (x :E a) -> (y :E a) -> Type.
-        \Refl :R (a :E Type) -> (x :E a) -> Eq -E- a -E- x -E- x.
-          \the :L (a :E Type) -> (x :R a) -> a.
+        \Refl :L (a :E Type) -> (x :E a) -> Eq -E- a -E- x -E- x.
+          \the :L (a :E Type) -> (x :L a) -> a.
             \T :E Type.
               \C :E (x :I Bool) -> T.
-                the -E- (Eq -E- T -E- (C -I- True) -E- (C -I- False)) -R- (Refl -E- T -E- (C -I- True))
+                the -E- (Eq -E- T -E- (C -I- True) -E- (C -I- False)) -L- (Refl -E- T -E- (C -I- True))
 
 ### Erase: irrelevant data ###
 

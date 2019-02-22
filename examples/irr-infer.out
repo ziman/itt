@@ -6,12 +6,12 @@
       \T :4 Type.
         \C :5 (pf :I Bool) -> T.
           \U :6 (t :E T) -> Type.
-            \g :7 (x :R U -9- (C -8- True)) -> Bool.
+            \g :7 (x :L U -9- (C -8- True)) -> Bool.
               \b :10 Bool.
                 \d :11 U -13- (C -12- b).
                   g -14- d
 
-  : (Bool :1 Type) -> (True :2 Bool) -> (False :3 Bool) -> (T :4 Type) -> (C :5 (pf :I Bool) -> T) -> (U :6 (t :E T) -> Type) -> (g :7 (x :R U -9- (C -8- True)) -> Bool) -> (b :10 Bool) -> (d :11 U -13- (C -12- b)) -> Bool
+  : (Bool :1 Type) -> (True :2 Bool) -> (False :3 Bool) -> (T :4 Type) -> (C :5 (pf :I Bool) -> T) -> (U :6 (t :E T) -> Type) -> (g :7 (x :L U -9- (C -8- True)) -> Bool) -> (b :10 Bool) -> (d :11 U -13- (C -12- b)) -> Bool
 
 ### Constraints ###
 
@@ -42,7 +42,7 @@
   (9,E)
   (12,I)
   (13,E)
-  (14,R)
+  (14,L)
 
 ### Solving ###
 
@@ -54,9 +54,9 @@
     6 -> E
     7 -> L
     9 -> E
-    11 -> R
+    11 -> L
     13 -> E
-    14 -> R
+    14 -> L
 
   rechecking eqs:
     Bool ~ Bool
@@ -101,10 +101,10 @@
   8 -> I
   9 -> E
   10 -> I
-  11 -> R
+  11 -> L
   12 -> I
   13 -> E
-  14 -> R
+  14 -> L
 
 ### Fully annotated program ###
 
@@ -114,10 +114,10 @@
       \T :E Type.
         \C :E (pf :I Bool) -> T.
           \U :E (t :E T) -> Type.
-            \g :L (x :R U -E- (C -I- True)) -> Bool.
+            \g :L (x :L U -E- (C -I- True)) -> Bool.
               \b :I Bool.
-                \d :R U -E- (C -I- b).
-                  g -R- d
+                \d :L U -E- (C -I- b).
+                  g -L- d
 
 ### Erase: irrelevant data ###
 

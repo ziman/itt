@@ -5,7 +5,7 @@
 \Eq : (a :E Type) -> (x :E a) -> (y :E a) -> Type.
 \Refl : (a :E Type) -> (x :E a) -> Eq a x x.
 
-\the : (a :E Type) -> (x :R a) -> a.
+\the : (a :E Type) -> (x :L a) -> a.
 
 \T : Type.
 \C : (x :I Bool) -> T.
