@@ -8,8 +8,11 @@
 
 \Vect : (n : Nat) -> (a : Type) -> Type.
 \Nil : (a : Type) -> Vect Z a.
-\Cons : (a : Type) -> (n : Nat) -> (x :R a) -> (xs :R Vect n a) -> Vect (S n) a.
+\Cons : (a : Type) -> (n : Nat) -> (x :L a) -> (xs :L Vect n a) -> Vect (S n) a.
 
-Cons Bool (S Z) T
-  (Cons Bool Z F
-    (Nil Bool))
+\b : Bool.
+
+Cons Bool (S (S Z)) T
+  (Cons Bool (S Z) b
+    (Cons Bool Z F
+      (Nil Bool)))
