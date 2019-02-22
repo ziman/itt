@@ -15,8 +15,9 @@ ITT supports only variables, lambdas and applications so if you need global defi
 you need to bring them into scope using lambdas. There's no pattern matching for now.
 
 The inference algorithm does not need any modality annotations to work.
-However, you probably want to annotate the primitives you bring into scope with lambdas.
-ITT cannot see their definitions and so cannot compute the correct annotations for them.
+However, any "primitives" you bring into scope with lambdas have no bodies
+so the minimal consistent annotation is "everything is irrelevant".
+You'll probably want to override this to give more meaning to your primitives.
 
 You can look at [one of the example programs](https://github.com/ziman/itt/blob/master/examples/irr-infer.tt)
 and [the corresponding output](https://github.com/ziman/itt/blob/master/examples/irr-infer.out).
