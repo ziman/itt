@@ -33,6 +33,9 @@ instance Eq Backtrace where
 instance Ord Backtrace where
     compare _ _ = EQ
 
+instance Show Backtrace where
+    show _ = "_bt"
+
 infixr 3 :->
 data (:->) a b = (:->) a b deriving (Eq, Ord, Show)
 
@@ -110,29 +113,17 @@ lookup n = do
 l ~= r = do
     gs <- tcGuards    <$> ask
     bt <- tcBacktrace <$> ask
-    tell Constrs
-        { csConvs = [gs :-> (bt, l, r)]
-        , csImpls = []
-        , csEqs   = []
-        }
+    tell mempty{ csConvs = [gs :-> (bt, l, r)] }
 
 budget :: Evar -> TC ()
 budget r = do
     gs <- tcGuards <$> ask
-    tell Constrs
-        { csConvs = []
-        , csImpls = [gs :-> r]
-        , csEqs   = []
-        }
+    tell mempty{ csImpls = [gs :-> r] }
 
 (<->) :: Evar -> Evar -> TC ()
 p <-> q = do
     bt <- tcBacktrace <$> ask
-    tell Constrs
-        { csConvs = []
-        , csImpls = []
-        , csEqs   = [(min p q, max p q)]
-        }
+    tell mempty{ csEqs = [(min p q, max p q)] }
 
 with :: (Name, Evar, Type) -> TC b -> TC b
 with (n, r, ty) = local $
