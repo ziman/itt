@@ -54,6 +54,7 @@ evar :: Parser Evar
 evar =
     (kwd ":I" *> pure (Q I))
     <|> (kwd ":E" *> pure (Q E))
+    <|> (kwd ":L" *> pure (Q L))
     <|> (kwd ":R" *> pure (Q R))
     <|> (kwd ":" *> freshEvar)
 

@@ -9,7 +9,7 @@ instance Pretty Name where
     pretty (N s i) = text s <> int i
     pretty Erased = text "_"
 
-data Q = I | E | R deriving (Eq, Ord, Show)
+data Q = I | E | L | R deriving (Eq, Ord, Show)
 
 instance Pretty Q where
     pretty = text . show

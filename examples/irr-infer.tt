@@ -20,7 +20,7 @@
 --
 -- Since `g` does not have a body, from which ITT could infer
 -- that its argument should be retained, we need to assert it.
-\g : (x :R U (C True)) -> Bool.
+\g : (x :L U (C True)) -> Bool.
 
 -- But we have only `d : U (C b)` for some unknown Boolean `b`.
 \b : Bool.
