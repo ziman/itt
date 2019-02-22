@@ -9,6 +9,7 @@ import TT
 import Parser
 import Inference
 import Solver
+import SolverSBV
 import Pretty
 
 check :: Term -> IO ()
@@ -28,7 +29,7 @@ check tm = case infer tm of
         let iter :: Int -> Constrs -> (M.Map Int Q, S.Set (Backtrace, TT Evar, TT Evar)) -> IO (M.Map Int Q)
             iter i cs ee@(evars, eqs) = do
                 putStrLn $ "-> iteration " ++ show i
-                evars' <- solveExt cs -- evars
+                evars' <- solveSBV cs
                 let eqs' = S.fromList
                             [(bt, p, q)
                             | (gs :-> (bt, p, q)) <- S.toList $ csConvs cs

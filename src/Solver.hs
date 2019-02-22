@@ -50,29 +50,9 @@ conv _bt Type Type = return mempty
 
 conv bt p q = throwE $ CantConvert bt p q
 
-{-
-solve :: Constrs -> M.Map Int Q -> M.Map Int Q
-solve cs evars
-    | evars' == evars = evars
-    | otherwise = solve cs evars'
-  where
-    evars' = foldr addConstr evars cs
-
-    addConstr c@(gs :-> CEV (Q q))
-        | vals evars gs <= q = id
-        | otherwise    = error $ "inconsistent constraint: " ++ show c
-    addConstr (gs :-> CEV (EV i)) = M.insert i (vals evars gs)
-    addConstr (gs :-> (CEq _ _ _)) = id
--}
-
 val :: M.Map Int Q -> Evar -> Q
 val evars (EV i) = M.findWithDefault I i evars
 val _ (Q q)  = q
 
 vals :: Foldable t => M.Map Int Q -> t Evar -> Q
 vals evars = fold . map (val evars) . toList
-
--- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-
-solveExt :: Constrs -> IO (M.Map Int Q)
-solveExt _ = return []

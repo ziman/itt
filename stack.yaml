@@ -1,1 +1,5 @@
 resolver: lts-13.6
+extra-deps: [sbv-8.0]
+
+# this nightly has sbv-8.0 in it already
+# resolver: nightly-2019-02-22
