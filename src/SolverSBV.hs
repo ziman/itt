@@ -34,7 +34,7 @@ solveSBV cs =
 
         result -> error $ "strange SAT result: " ++ show result
   where
-    verbose = True
+    verbose = False
 
 data Q_ = I_ | E_ | L_ | R_ deriving (Eq, Ord, Data, Read, Show, SymVal, HasKind)
 
