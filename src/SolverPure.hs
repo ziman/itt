@@ -7,10 +7,55 @@ import Control.Monad.Trans.Except
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-solvePure :: Constrs -> Except String (M.Map Int Q)
-solvePure Constrs{csImpls, csEqs} = undefined
+rig0 :: Q
+rig0 = I
+
+rig1 :: Q
+rig1 = L
+
+add :: Q -> Q -> Q
+add _ _ = I
+
+mul :: Q -> Q -> Q
+mul _ _ = I
+
+leq :: Q -> Q -> Bool
+leq _ _ = True
+
+iter :: M.Map Int Q -> M.Map Evar [S.Set Evar] -> Except String (M.Map Int Q)
+iter vals cs = do
+    vals' <- run vals $ M.toList cs
+    if vals' == vals
+        then return vals
+        else iter vals' cs
+
+eval :: M.Map Int Q -> [S.Set Evar] -> Q
+eval vals = foldr (add . foldr (mul . val) rig1) rig0
   where
-    impls = map (\(gs :-> v) -> S.map repr gs :-> repr v) csImpls
+    val (EV i) = vals M.! i
+    val (Q q) = q
+
+run :: M.Map Int Q -> (Evar, [S.Set Evar]) -> Except String (M.Map Int Q)
+run vals [] = vals
+run vals ((Q q, gss) : impls)
+    | eval vals gss `leq` q = run vals impls
+    | otherwise = throwE $ "cannot solve " ++ show (gss, q)
+run vals ((EV i, gss) : impls)
+    | q <- eval vals gss
+    = case M.lookup i vals of
+        Nothing -> run (M.insert i q vals) impls
+        Just q'
+            | q' `leq` q -> run (M.insert i q vals) impls
+            | q `leq` q' -> run vals impls  -- nothing to do
+            | otherwise  -> throwE $ "incomparable bump of evar " ++ show i ++ " between " ++ show (q', q)
+
+solvePure :: Constrs -> Except String (M.Map Int Q)
+solvePure Constrs{csImpls, csEqs} = iter M.empty implsGrouped
+  where
+    implsGrouped = M.fromListWith (++)
+        [ (repr v, [S.map repr gs])
+        | (gs :-> v) <- csImpls
+        ]
     repr = (reprMap M.!)
     reprMap = M.fromList [(ev, head $ S.toList (gGroups M.! g)) | (ev, g) <- M.toList gIndex]
     Groups{gIndex, gGroups} = foldr merge noGroups $ S.toList csEqs
