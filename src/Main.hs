@@ -10,6 +10,7 @@ import Parser
 import Inference
 import Solver
 import SolverSBV
+import SolverPure
 import Pretty
 
 check :: Term -> IO ()
@@ -29,9 +30,9 @@ check tm = case infer tm of
         let iter :: Int -> Constrs -> (M.Map Int Q, S.Set (Backtrace, TT Evar, TT Evar)) -> IO (M.Map Int Q)
             iter i cs ee@(evars, eqs) = do
                 putStrLn $ "-> iteration " ++ show i
-                evars' <- solveSBV cs >>= \case
-                    Just evs -> return evs
-                    Nothing  -> error "no solution found"
+                let evars' = case runExcept (solvePure cs) of
+                        Left err  -> error $ "no solution found: " ++ err
+                        Right evs -> evs
                 let eqs' = S.fromList
                             [(bt, p, q)
                             | (gs :-> (bt, p, q)) <- S.toList $ csConvs cs
