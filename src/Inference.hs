@@ -159,6 +159,7 @@ inferTm (V n) = bt ("VAR", n) $ do
 inferTm (Lam n r ty rhs) = bt ("LAM", n) $ do
     tyty <- irr $ inferTm ty
     tyty ~= Type
+    tell mempty{ csImpls = [[Q I] :-> r] }  -- make the binder mentioned in the constraints
     rty <- with (n, r, ty) $ inferTm rhs
     return $ Pi n r ty rty
 
