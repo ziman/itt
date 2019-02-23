@@ -11,11 +11,11 @@
 
   [] -> Nat ~ Nat
   [] -> Type ~ Type
-  [E] -> Type ~ Type
+  [I] -> Type ~ Type
 
-  [E] -> 1
-  [E] -> 1
-  [E] -> 1
+  [I] -> I
+  [I] -> I
+  [I] -> I
   [] -> 3
   [4] -> 2
 
@@ -25,7 +25,6 @@
 
 -> iteration 1
   evar updates:
-    1 -> E
     2 -> L
     3 -> L
     4 -> L
@@ -42,24 +41,22 @@
 
 ### Final solution ###
 
-  1 -> E
   2 -> L
   3 -> L
   4 -> L
 
 ### Fully annotated program ###
 
-\Nat :E Type.
+\Nat :I Type.
   \Z :L Nat.
     \S :L (n :L Nat) -> Nat.
       S -L- Z
 
 ### Erase: irrelevant data ###
 
-\Nat : Type.
-  \Z : Nat.
-    \S : (n : Nat) -> Nat.
-      S Z
+\Z : Nat.
+  \S : (n : Nat) -> Nat.
+    S Z
 
 ### Erase: non-runtime data ###
 

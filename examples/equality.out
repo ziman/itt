@@ -23,22 +23,22 @@
   [20] -> Type ~ Type
   [21] -> T ~ T
   [21] -> Type ~ Type
-  [E] -> a ~ a
-  [E] -> Type ~ Type
+  [I] -> a ~ a
+  [I] -> Type ~ Type
 
-  [E] -> 1
-  [E] -> 1
-  [E] -> E
-  [E] -> E
-  [E] -> E
-  [E] -> 4
-  [6,E] -> E
-  [7,E] -> E
-  [8,E] -> E
-  [E] -> E
-  [E] -> E
-  [E] -> 1
-  [E] -> 10
+  [I] -> I
+  [I] -> I
+  [I] -> I
+  [I] -> I
+  [I] -> I
+  [I] -> I
+  [6,I] -> I
+  [7,I] -> I
+  [8,I] -> I
+  [I] -> I
+  [I] -> I
+  [I] -> I
+  [I] -> I
   [] -> 9
   [20] -> 4
   [14,20] -> 10
@@ -69,7 +69,6 @@
 
 -> iteration 1
   evar updates:
-    1 -> E
     4 -> E
     5 -> L
     6 -> E
@@ -89,7 +88,6 @@
   rechecking eqs:
     Bool ~ Bool
     T ~ T
-    a ~ a
     Eq -6- T -7- (C -17- True) -8- (C -17- True) ~ Eq -14- T -15- (C -12- True) -16- (C -13- False)
     Type ~ Type
 
@@ -109,7 +107,6 @@
   rechecking eqs:
     Bool ~ Bool
     T ~ T
-    a ~ a
     Eq -6- T -7- (C -17- True) -8- (C -17- True) ~ Eq -14- T -15- (C -12- True) -16- (C -13- False)
     C -17- True ~ C -12- True
     C -17- True ~ C -13- False
@@ -133,7 +130,6 @@
 
 ### Final solution ###
 
-  1 -> E
   2 -> I
   3 -> I
   4 -> E
@@ -157,7 +153,7 @@
 
 ### Fully annotated program ###
 
-\Bool :E Type.
+\Bool :I Type.
   \True :I Bool.
     \False :I Bool.
       \Eq :E (a :E Type) -> (x :E a) -> (y :E a) -> Type.
@@ -169,13 +165,12 @@
 
 ### Erase: irrelevant data ###
 
-\Bool : Type.
-  \Eq : (a : Type) -> (x : a) -> (y : a) -> Type.
-    \Refl : (a : Type) -> (x : a) -> Eq a x x.
-      \the : (a : Type) -> (x : a) -> a.
-        \T : Type.
-          \C : T.
-            the (Eq T C C) (Refl T C)
+\Eq : (a : Type) -> (x : a) -> (y : a) -> Type.
+  \Refl : (a : Type) -> (x : a) -> Eq a x x.
+    \the : (a : Type) -> (x : a) -> a.
+      \T : Type.
+        \C : T.
+          the (Eq T C C) (Refl T C)
 
 ### Erase: non-runtime data ###
 

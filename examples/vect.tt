@@ -6,9 +6,9 @@
 \Z : Nat.
 \S : (n :L Nat) -> Nat.
 
-\Vect : (n : Nat) -> (a : Type) -> Type.
-\Nil : (a : Type) -> Vect Z a.
-\Cons : (a : Type) -> (n : Nat) -> (x :L a) -> (xs :L Vect n a) -> Vect (S n) a.
+\Vect : (n :E Nat) -> (a :E Type) -> Type.
+\Nil : (a :I Type) -> Vect Z a.
+\Cons : (a :I Type) -> (n :I Nat) -> (x :L a) -> (xs :L Vect n a) -> Vect (S n) a.
 
 \b : Bool.
 

@@ -114,6 +114,14 @@ given g = local $
     \(TCEnv env gs bt)
         -> TCEnv env (S.insert g gs) bt
 
+irr :: TC b -> TC b
+irr = local $
+    \(TCEnv env gs bt)
+        -> TCEnv (irrEnv env) (S.singleton $ Q I) bt
+
+irrEnv :: Env Evar -> Env Evar
+irrEnv = M.map $ \(q, ty) -> (Q I, ty)
+
 lookup :: Name -> TC (Evar, Type)
 lookup n = do
     env <- tcEnv <$> ask
@@ -149,16 +157,16 @@ inferTm (V n) = bt ("VAR", n) $ do
     return ty    
 
 inferTm (Lam n r ty rhs) = bt ("LAM", n) $ do
-    tyty <- given (Q E) $ inferTm ty
+    tyty <- irr $ inferTm ty
     tyty ~= Type
     rty <- with (n, r, ty) $ inferTm rhs
     return $ Pi n r ty rty
 
 inferTm (Pi n r ty rhs) = bt ("PI", n) $ do
-    tyty <- given (Q E) $ inferTm ty
+    tyty <- irr $ inferTm ty
     tyty ~= Type
 
-    rty <- with (n, r, ty) $ {- given (Q E) $ -} inferTm rhs
+    rty <- with (n, r, ty) $ irr $ inferTm rhs
     rty ~= Type
 
     return Type

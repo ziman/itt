@@ -17,24 +17,24 @@
 
   [] -> U -13- (C -12- b) ~ U -9- (C -8- True)
   [] -> Type ~ Type
-  [9,E] -> Bool ~ Bool
-  [13,E] -> Bool ~ Bool
-  [E] -> T ~ T
-  [E] -> Type ~ Type
+  [9,I] -> Bool ~ Bool
+  [13,I] -> Bool ~ Bool
+  [I] -> T ~ T
+  [I] -> Type ~ Type
 
-  [E] -> 1
-  [E] -> 1
-  [E] -> 1
-  [E] -> 4
-  [E] -> 4
-  [E] -> 6
-  [9,E] -> 5
-  [8,9,E] -> 2
-  [E] -> 1
-  [E] -> 1
-  [E] -> 6
-  [13,E] -> 5
-  [12,13,E] -> 10
+  [I] -> I
+  [I] -> I
+  [I] -> I
+  [I] -> I
+  [I] -> I
+  [I] -> I
+  [9,I] -> I
+  [8,9,I] -> I
+  [I] -> I
+  [I] -> I
+  [I] -> I
+  [13,I] -> I
+  [12,13,I] -> I
   [] -> 7
   [14] -> 11
 
@@ -48,10 +48,6 @@
 
 -> iteration 1
   evar updates:
-    1 -> E
-    4 -> E
-    5 -> E
-    6 -> E
     7 -> L
     9 -> E
     11 -> L
@@ -59,8 +55,6 @@
     14 -> L
 
   rechecking eqs:
-    Bool ~ Bool
-    T ~ T
     U -13- (C -12- b) ~ U -9- (C -8- True)
     Type ~ Type
 
@@ -74,8 +68,6 @@
   evar updates:
 
   rechecking eqs:
-    Bool ~ Bool
-    T ~ T
     C -12- b ~ C -8- True
     U -13- (C -12- b) ~ U -9- (C -8- True)
     Type ~ Type
@@ -92,15 +84,9 @@
 
 ### Final solution ###
 
-  1 -> E
-  2 -> I
-  4 -> E
-  5 -> E
-  6 -> E
   7 -> L
   8 -> I
   9 -> E
-  10 -> I
   11 -> L
   12 -> I
   13 -> E
@@ -108,12 +94,12 @@
 
 ### Fully annotated program ###
 
-\Bool :E Type.
+\Bool :I Type.
   \True :I Bool.
     \False :I Bool.
-      \T :E Type.
-        \C :E (pf :I Bool) -> T.
-          \U :E (t :E T) -> Type.
+      \T :I Type.
+        \C :I (pf :I Bool) -> T.
+          \U :I (t :E T) -> Type.
             \g :L (x :L U -E- (C -I- True)) -> Bool.
               \b :I Bool.
                 \d :L U -E- (C -I- b).
@@ -121,13 +107,9 @@
 
 ### Erase: irrelevant data ###
 
-\Bool : Type.
-  \T : Type.
-    \C : T.
-      \U : (t : T) -> Type.
-        \g : (x : U C) -> Bool.
-          \d : U C.
-            g d
+\g : (x : U C) -> Bool.
+  \d : U C.
+    g d
 
 ### Erase: non-runtime data ###
 
