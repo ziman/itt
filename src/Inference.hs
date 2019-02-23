@@ -33,18 +33,36 @@ instance Eq Backtrace where
 instance Ord Backtrace where
     compare _ _ = EQ
 
-data ConstrRHS = CEV Evar | CEq Backtrace (TT Evar) (TT Evar) deriving (Eq, Ord)
+instance Show Backtrace where
+    show _ = "_bt"
 
-instance Show ConstrRHS where
-    show (CEV v) = show v
-    show (CEq _bt p q) = show p ++ " ~ " ++ show q
+infixr 3 :->
+data (:->) a b = (:->) a b deriving (Eq, Ord)
 
-data Constr = (:->) (S.Set Evar) ConstrRHS deriving (Eq, Ord)
+class ShowRHS a where
+    showRHS :: a -> String
 
-instance Show Constr where
-    show (gs :-> rhs) = show (S.toList gs) ++ " -> " ++ show rhs
+instance ShowRHS (Backtrace, TT Evar, TT Evar) where
+    showRHS (_bt, lhs, rhs) = show lhs ++ " ~ " ++ show rhs
 
-type Constrs = S.Set Constr
+instance ShowRHS Evar where
+    showRHS = show
+
+instance ShowRHS b => Show (S.Set Evar :-> b) where
+    show (gs :-> y) = show (S.toList gs) ++ " -> " ++ showRHS y
+
+data Constrs = Constrs
+    { csConvs :: S.Set (S.Set Evar :-> (Backtrace, TT Evar, TT Evar))
+    , csImpls :: [S.Set Evar :-> Evar]
+    , csEqs   :: S.Set (Evar, Evar)
+    }
+
+instance Semigroup Constrs where
+    Constrs cs is es <> Constrs cs' is' es'
+        = Constrs (cs <> cs') (is <> is') (es <> es')
+
+instance Monoid Constrs where
+    mempty = Constrs [] [] []
 
 type Term = TT Evar
 type Type = TT Evar
@@ -96,6 +114,14 @@ given g = local $
     \(TCEnv env gs bt)
         -> TCEnv env (S.insert g gs) bt
 
+irr :: TC b -> TC b
+irr = local $
+    \(TCEnv env gs bt)
+        -> TCEnv (irrEnv env) (S.singleton $ Q I) bt
+
+irrEnv :: Env Evar -> Env Evar
+irrEnv = M.map $ \(q, ty) -> (Q I, ty)
+
 lookup :: Name -> TC (Evar, Type)
 lookup n = do
     env <- tcEnv <$> ask
@@ -103,18 +129,21 @@ lookup n = do
         Nothing -> tcfail $ UnknownVar n
         Just rty -> return rty
 
-assert :: ConstrRHS -> TC ()
-assert cr = do
-    gs <- tcGuards <$> ask
-    tell [gs :-> cr]
-
 (~=) :: Term -> Term -> TC ()
 l ~= r = do
+    gs <- tcGuards    <$> ask
     bt <- tcBacktrace <$> ask
-    assert $ CEq bt (rnf l) (rnf r)
+    tell mempty{ csConvs = [gs :-> (bt, l, r)] }
+
+budget :: Evar -> TC ()
+budget r = do
+    gs <- tcGuards <$> ask
+    tell mempty{ csImpls = [gs :-> r] }
 
 (<->) :: Evar -> Evar -> TC ()
-p <-> q = tell [[p] :-> CEV q, [q] :-> CEV p]
+p <-> q = do
+    bt <- tcBacktrace <$> ask
+    tell mempty{ csEqs = [(min p q, max p q)] }
 
 with :: (Name, Evar, Type) -> TC b -> TC b
 with (n, r, ty) = local $
@@ -124,20 +153,21 @@ with (n, r, ty) = local $
 inferTm :: Term -> TC Type
 inferTm (V n) = bt ("VAR", n) $ do
     (r, ty) <- lookup n
-    assert (CEV r)
+    budget r
     return ty    
 
 inferTm (Lam n r ty rhs) = bt ("LAM", n) $ do
-    tyty <- given (Q E) $ inferTm ty
+    tyty <- irr $ inferTm ty
     tyty ~= Type
+    tell mempty{ csImpls = [[Q I] :-> r] }  -- make the binder mentioned in the constraints
     rty <- with (n, r, ty) $ inferTm rhs
     return $ Pi n r ty rty
 
 inferTm (Pi n r ty rhs) = bt ("PI", n) $ do
-    tyty <- given (Q E) $ inferTm ty
+    tyty <- irr $ inferTm ty
     tyty ~= Type
 
-    rty <- with (n, r, ty) $ given (Q E) $ inferTm rhs
+    rty <- with (n, r, ty) $ irr $ inferTm rhs
     rty ~= Type
 
     return Type

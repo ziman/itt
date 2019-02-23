@@ -9,6 +9,7 @@ import TT
 import Parser
 import Inference
 import Solver
+import SolverSBV
 import Pretty
 
 check :: Term -> IO ()
@@ -20,13 +21,22 @@ check tm = case infer tm of
         putStrLn $ "\n  : " ++ prettyShow ty
         putStrLn ""
         putStrLn "### Constraints ###\n"
-        putStrLn $ unlines ["  " ++ show c | c <- S.toList cs]
+        putStrLn $ unlines ["  " ++ show c | c <- S.toList $ csConvs cs]
+        putStrLn $ unlines ["  " ++ show c | c <- csImpls cs]
+        putStrLn $ unlines ["  " ++ show c | c <- S.toList $ csEqs cs]
 
         putStrLn "### Solving ###\n"
-        let iter i cs ee@(evars, eqs) = do
+        let iter :: Int -> Constrs -> (M.Map Int Q, S.Set (Backtrace, TT Evar, TT Evar)) -> IO (M.Map Int Q)
+            iter i cs ee@(evars, eqs) = do
                 putStrLn $ "-> iteration " ++ show i
-                let evars' = solve cs evars
-                    eqs' = S.fromList [(bt, p, q) | (gs :-> CEq bt p q) <- S.toList cs, vals evars' gs > I]
+                evars' <- solveSBV cs >>= \case
+                    Just evs -> return evs
+                    Nothing  -> error "no solution found"
+                let eqs' = S.fromList
+                            [(bt, p, q)
+                            | (gs :-> (bt, p, q)) <- S.toList $ csConvs cs
+                            , vals evars' gs > I
+                            ]
                     ee' = (evars', eqs')
                 if ee == ee'
                     then return evars
@@ -44,12 +54,14 @@ check tm = case infer tm of
                             | (_bt, p, q) <- S.toList eqs'
                             ]
 
-                        case runExcept (S.unions <$> traverse (\(bt,p,q) -> conv bt p q) (S.toList eqs')) of
+                        case runExcept (mconcat <$> traverse (\(bt,p,q) -> conv bt p q) (S.toList eqs')) of
                             Left err -> error $ "could not convert: " ++ show err
                             Right cs' -> do
                                 putStrLn "  new constraints from conversion:"
-                                putStrLn $ unlines ["    " ++ show c | c <- S.toList cs']
-                                iter (i+1) (cs' `S.union` cs) ee'
+                                putStrLn $ unlines ["    " ++ show c | c <- S.toList $ csConvs cs']
+                                putStrLn $ unlines ["    " ++ show c | c <- csImpls cs']
+                                putStrLn $ unlines ["    " ++ show p ++ " = " ++ show q | (p, q) <- S.toList $ csEqs cs']
+                                iter (i+1) (cs' <> cs) ee'
 
         evars <- iter 1 cs ([], [])
 

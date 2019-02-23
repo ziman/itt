@@ -28,37 +28,27 @@ instance Show ConvErr where
         ++ "!! can't convert " ++ show p ++ " ~ " ++ show q
 
 conv :: Backtrace -> Term -> Term -> Except ConvErr Constrs
-conv bt (V n) (V n') | n == n' = return S.empty
+conv bt (V n) (V n') | n == n' = return mempty
 conv bt (Lam n r ty rhs) (Lam n' r' ty' rhs') = do
     tycs  <- conv bt ty ty'
     rhscs <- conv bt rhs $ subst n' (V n) rhs'
-    return $ tycs `S.union` rhscs `S.union` [[r] :-> CEV r', [r'] :-> CEV r]
+    return $ tycs <> rhscs <> mempty { csEqs = [(r, r')] }
 
 conv bt (Pi n r ty rhs) (Pi n' r' ty' rhs') = do
     tycs  <- conv bt ty ty'
     rhscs <- conv bt rhs $ subst n' (V n) rhs'
-    return $ tycs `S.union` rhscs `S.union` [[r] :-> CEV r', [r'] :-> CEV r]
+    return $ tycs <> rhscs <> mempty { csEqs = [(r, r')] }
 
 conv bt (App r f x) (App r' f' x') = do
     fcs <- conv bt f f'
-    return $ fcs `S.union` [[r] :-> CEV r', [r'] :-> CEV r, [r] :-> (CEq bt x x')]
+    return $ fcs <> mempty
+        { csEqs = [(r, r')]
+        , csConvs =  [[r] :-> (bt, x, x')]
+        }
 
-conv _bt Type Type = return S.empty
+conv _bt Type Type = return mempty
 
 conv bt p q = throwE $ CantConvert bt p q
-
-solve :: Constrs -> M.Map Int Q -> M.Map Int Q
-solve cs evars
-    | evars' == evars = evars
-    | otherwise = solve cs evars'
-  where
-    evars' = foldr addConstr evars cs
-
-    addConstr c@(gs :-> CEV (Q q))
-        | vals evars gs <= q = id
-        | otherwise    = error $ "inconsistent constraint: " ++ show c
-    addConstr (gs :-> CEV (EV i)) = M.insertWith max i (vals evars gs)
-    addConstr (gs :-> (CEq _ _ _)) = id
 
 val :: M.Map Int Q -> Evar -> Q
 val evars (EV i) = M.findWithDefault I i evars
