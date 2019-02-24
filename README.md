@@ -26,7 +26,7 @@ and [the corresponding output](https://github.com/ziman/itt/blob/master/examples
 
 Inference gets easier if you don't need to support all modalities.
 
-* **I** requires interleaving typechecking and constraint solving.
+* **I** requires interleaving conversion checking and constraint solving.
 
 * **L** requires counting of constraints,
   which interferes with evar equalities.
