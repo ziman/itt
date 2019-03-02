@@ -26,12 +26,12 @@ and [the corresponding output](https://github.com/ziman/itt/blob/master/examples
 
 Inference gets easier if you don't need to support all modalities.
 
-* **I** requires interleaving conversion checking and constraint solving.
+* **I** requires interleaving conversion checking and constraint solving,
+  iteratively, until you reach a fixed point where no new conversions arise.
 
-* **L** requires counting of constraints,
-  which interferes with evar equalities.
-  I use an external SMT solver to get it done cheaply but
-  it wouldn't be very hard to do internally with a bit of effort.
+* **L** requires counting constraints, which interferes with evar equalities.
+  Namely, you can no longer express equality `p ~ q` as `(p -> q) /\ (q -> p)`.
+  I use an external SMT solver to get it done.
 
 If you leave out either of the two, you get an easier problem to solve
 when inferring annotations.
