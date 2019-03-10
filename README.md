@@ -1,5 +1,7 @@
 # itt
 
+**note**: this repository is obsoleted by https://github.com/ziman/itt-idris
+
 ITT supports the following modalities:
 * **I** (irrelevance) -- erased at runtime, disregarded in conversion checks
 * **E** (erased) -- erased at runtime, subject to conversion checks
