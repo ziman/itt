@@ -181,7 +181,6 @@ inferTm (App r f x) = bt ("APP", f) $ do
             xty ~= ty'
             r <-> r'
             return $ subst n' x rhs'
-            
         fty' -> tcfail $ NotPi fty'
 
 inferTm Type = pure Type
